@@ -1,5 +1,7 @@
-import GUN, { IGunUserInstance } from "gun";
+import { IGunUserInstance } from "gun";
 import useDB from "./useDB";
+
+import "gun/sea";
 
 export default function useUser() {
 	const db = useDB();

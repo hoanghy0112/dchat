@@ -1,9 +1,14 @@
+import { getCookie } from "cookies-next";
+
+// import "gun/sea";
+// import "gun/axe";
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { cookies } from "next/headers";
 import { ReactNode } from "react";
 import "./globals.css";
-import { getCookie } from "cookies-next";
+import { COOKIES } from "@/constants/cookies";
+import { cookies } from "next/headers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +24,7 @@ export default function RootLayout({
 	signin: ReactNode;
 	home: ReactNode;
 }) {
-	const uid = getCookie("uid") || "";
+	const uid = cookies().get(COOKIES.UID)?.value || "";
 	console.log({ uid });
 
 	return (
