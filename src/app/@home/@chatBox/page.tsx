@@ -7,9 +7,5 @@ export default function Page({
 }) {
 	const receiverUID = searchParams?.uid;
 
-	return (
-		<div>
-			<ChatBox receiverUID={receiverUID} />
-		</div>
-	);
+	return <ChatBox receiverUID={receiverUID} />;
 }

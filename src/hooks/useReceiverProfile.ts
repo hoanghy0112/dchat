@@ -24,3 +24,20 @@ export default function useReceiverProfile({ users, id }: IChatRoom) {
 
 	return { user, receiverUID };
 }
+
+export function useReceiverProfileFromID(receiverUID?: string) {
+	const db = getDB();
+
+	const [user, setUser] = useState<IUser>();
+
+	useEffect(() => {
+        if (!receiverUID) return;
+		db.get(DB_KEYS.USERS)
+			.get(receiverUID)
+			.once((data: IUser) => {
+				setUser(data);
+			});
+	}, []);
+
+	return { user, receiverUID };
+}

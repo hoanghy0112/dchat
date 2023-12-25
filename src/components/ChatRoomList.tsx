@@ -9,7 +9,7 @@ export default function ChatRoomList({
 	const chatRooms = useChatRoomList();
 
 	return (
-		<ul>
+		<ul className=" bg-slate-100 rounded-lg">
 			{Array.from(chatRooms.values()).map((room) => (
 				<ChatRoomItem key={room.id} room={room} />
 			))}
