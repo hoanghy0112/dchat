@@ -7,7 +7,6 @@ import { COOKIES } from "@/constants/cookies";
 import { IGunChain, IGunInstance } from "gun";
 
 export default function useChatMessages(receiverUID?: string) {
-	const db = getDB();
 	const uid = getCookie(COOKIES.UID) as string;
 
 	const [messages, setMessages] = useState<IMessage[]>([]);
@@ -17,7 +16,7 @@ export default function useChatMessages(receiverUID?: string) {
 	useEffect(() => {
 		if (!receiverUID) return;
 
-		const listener = db
+		const listener = getDB()
 			.get(`${DB_KEYS.MESSAGES}-${roomTitle}`)
 			.map()
 			.once((data: IMessage, index) => {
@@ -29,28 +28,21 @@ export default function useChatMessages(receiverUID?: string) {
 		};
 	}, []);
 
-    console.log({messages, roomTitle})
-
 	useEffect(() => {
 		let getDetailListener: IGunChain<any>;
-		console.log({ db });
 		const listener = getDB()
 			.get(`${DB_KEYS.MESSAGES}-${roomTitle}`)
 			.on((data) => {
-				const length = Object.keys(data).length;
-
-				console.log({ length, d: Object.keys(data).at(-1) });
 				const index = Object.keys(data).at(-1);
 
 				getDetailListener = getDB()
 					.get(`${DB_KEYS.MESSAGES}-${roomTitle}`)
 					.get(index || "")
 					.once((data) => {
-						// console.log({ data });
-						// updateToList({
-						// 	...data,
-						// 	date: index ? new Date(index) : null,
-						// });
+						updateToList({
+							...data,
+							date: index ? new Date(index) : null,
+						});
 					});
 			});
 
@@ -61,11 +53,12 @@ export default function useChatMessages(receiverUID?: string) {
 	}, []);
 
 	function updateToList(data: IMessage) {
-		// setMessages((prev) =>
-		// 	[...prev.filter((d) => d.date != data.date), data].sort(
-		// 		(a, b) => (a.date?.getTime() || 0) - (b.date?.getTime() || 0)
-		// 	)
-		// );
+		setMessages((prev) =>
+			[
+				...prev.filter((d) => d.date?.getTime() != data.date?.getTime()),
+				data,
+			].sort((a, b) => (a.date?.getTime() || 0) - (b.date?.getTime() || 0))
+		);
 	}
 
 	return messages;

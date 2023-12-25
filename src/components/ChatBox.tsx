@@ -44,6 +44,21 @@ export default function ChatBox({ receiverUID }: { receiverUID?: string }) {
 			.put(message);
 	}
 
+	// useEffect(() => {
+	// 	getDB()
+	// 		.get(`${DB_KEYS.MESSAGES}-${roomTitle}`)
+	// 		.on((data) => {
+	// 			console.log({ b: data });
+	// 		});
+
+	// 	getDB()
+	// 		.get(`${DB_KEYS.MESSAGES}-${roomTitle}`)
+	// 		.map()
+	// 		.on((data) => {
+	// 			console.log({ c: data });
+	// 		});
+	// }, [messages]);
+
 	useEffect(() => {
 		if (!receiverUID) return;
 		const newRoom = db
