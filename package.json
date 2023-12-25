@@ -3,21 +3,25 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "concurrently \"npm run serve-gun\" \"next dev\"",
     "build": "next build",
     "start": "next start",
     "serve-gun": "node server.js",
     "lint": "next lint"
   },
   "dependencies": {
+    "@nextui-org/react": "^2.2.9",
     "cookies-next": "^4.1.0",
     "express": "^4.18.2",
     "firebase": "^10.7.1",
+    "framer-motion": "^10.16.16",
     "gun": "^0.2020.1239",
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18",
-    "react-hook-form": "^7.49.2"
+    "react-hook-form": "^7.49.2",
+    "react-icons": "^4.12.0",
+    "react-use": "^17.4.2"
   },
   "devDependencies": {
     "@types/node": "^20",

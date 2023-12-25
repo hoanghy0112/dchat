@@ -3,4 +3,5 @@ export const COOKIES = {
 	ACCESS_TOKEN: "accessToken",
 	EMAIL: "email",
 	UID: "uid",
+	PHOTO: "photo",
 };

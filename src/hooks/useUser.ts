@@ -1,10 +1,10 @@
 import { IGunUserInstance } from "gun";
-import useDB from "./useDB";
+import useDB, { getDB } from "./useDB";
 
 import "gun/sea";
 
 export default function useUser() {
-	const db = useDB();
+	const db = getDB();
 
 	const user = db?.user().recall({ sessionStorage: true });
 
