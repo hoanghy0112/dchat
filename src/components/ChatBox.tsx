@@ -19,6 +19,7 @@ export default function ChatBox({ receiverUID }: { receiverUID?: string }) {
 	const uid = getCookie(COOKIES.UID) as string;
 
 	const inputRef = useRef<HTMLInputElement>(null);
+	const bottomRef = useRef<HTMLDivElement>(null);
 
 	const roomTitle = [uid, receiverUID].sort().join("-");
 
@@ -26,6 +27,10 @@ export default function ChatBox({ receiverUID }: { receiverUID?: string }) {
 	const { room, roomId } = useChatRoomProfile(receiverUID || "");
 
 	const messages = useChatMessages(receiverUID);
+
+	function autoScroll(behavior: ScrollBehavior = "smooth") {
+		setTimeout(() => bottomRef?.current?.scrollIntoView({ behavior }), 200);
+	}
 
 	function sendMessage() {
 		if (!inputRef?.current?.value) return;
@@ -44,21 +49,6 @@ export default function ChatBox({ receiverUID }: { receiverUID?: string }) {
 			.put(message);
 	}
 
-	// useEffect(() => {
-	// 	getDB()
-	// 		.get(`${DB_KEYS.MESSAGES}-${roomTitle}`)
-	// 		.on((data) => {
-	// 			console.log({ b: data });
-	// 		});
-
-	// 	getDB()
-	// 		.get(`${DB_KEYS.MESSAGES}-${roomTitle}`)
-	// 		.map()
-	// 		.on((data) => {
-	// 			console.log({ c: data });
-	// 		});
-	// }, [messages]);
-
 	useEffect(() => {
 		if (!receiverUID) return;
 		const newRoom = db
@@ -69,7 +59,12 @@ export default function ChatBox({ receiverUID }: { receiverUID?: string }) {
 				users: [uid, receiverUID].sort().join(","),
 			});
 		db.get(DB_KEYS.ROOMS).get(roomTitle).get(DB_KEYS.ROOM_INFO).set(newRoom);
+		autoScroll();
 	}, [receiverUID, roomTitle, uid]);
+
+	useEffect(() => {
+		autoScroll("auto");
+	}, [messages.length]);
 
 	return (
 		<div className=" h-full flex flex-col overflow-auto">
@@ -93,10 +88,22 @@ export default function ChatBox({ receiverUID }: { receiverUID?: string }) {
 						</div>
 						<div></div>
 					</div>
-					<div className=" w-full mt-5 bg-red-500 flex-1 overflow-auto">
+					<div className=" w-full mt-5 pr-3 flex-1 overflow-auto">
 						{messages.map((data: IMessage, index: number) => (
-							<p key={index}>{data.content || "No content"}</p>
+							<div
+								key={index}
+								className={` w-full my-2 flex ${
+									data.uid == uid
+										? " justify-end pl-20"
+										: " justify-start pr-20"
+								}`}
+							>
+								<p className=" w-fit bg-slate-100 px-3 py-2 rounded-md hover:bg-slate-200 duration-200 cursor-pointer">
+									{data.content || "No content"}
+								</p>
+							</div>
 						))}
+						<div ref={bottomRef} />
 					</div>
 					<div className=" flex gap-5 px-3 w-full pt-4 pb-2">
 						<Input

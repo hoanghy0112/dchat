@@ -8,8 +8,11 @@ import { signInWithGoogle } from "@/services/firebase/googleAuthentication";
 import { setCookie } from "cookies-next";
 import { COOKIES } from "@/constants/cookies";
 import { DB_KEYS } from "@/constants/dbKeys";
+import { useRouter } from "next/navigation";
 
 export default function Layout({ children }: { children: ReactNode }) {
+	const router = useRouter();
+
 	const user = useUser();
 	const db = getDB();
 
@@ -42,6 +45,8 @@ export default function Layout({ children }: { children: ReactNode }) {
 				user.auth(uid, uid);
 			}
 		);
+
+		router.replace("/home");
 	}
 
 	return (
