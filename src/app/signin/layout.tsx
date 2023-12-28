@@ -1,6 +1,9 @@
 "use client";
 
 import useUser from "@/hooks/useUser";
+import Image from "next/image";
+import chat from "../../assets/images/Chat.svg"
+import {Button, ButtonGroup} from "@nextui-org/react";
 import { FormEvent, ReactNode } from "react";
 
 import useDB, { getDB } from "@/hooks/useDB";
@@ -46,12 +49,15 @@ export default function Layout({ children }: { children: ReactNode }) {
 			}
 		);
 
-		router.replace("/home");
+		// router.replace("/home");
 	}
 
 	return (
-		<div className=" w-screen h-screen">
-			<button onClick={onSignIn}>Sign in with Google</button>
+		<div className=" flex bg-background-100 w-screen h-screen items-center justify-around">
+			<Image src={chat} alt="background" width={700} height={700} />
+			<Button className=" text-white hover:bg-hovered bg-secondary" onClick={onSignIn}>
+				Sign in with Google
+			</Button>
 			{children}
 		</div>
 	);

@@ -5,5 +5,5 @@ import { redirect } from "next/navigation";
 export default function Page() {
 	const uid = cookies().get(COOKIES.UID)?.value || "";
 	if (!uid) redirect("/signin");
-	else redirect("/home");
+	// else redirect("/home");
 }

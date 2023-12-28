@@ -3,6 +3,7 @@ import { COOKIES } from "@/constants/cookies";
 import { Be_Vietnam_Pro } from "next/font/google";
 import { cookies } from "next/headers";
 import Image from "next/image";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
 
@@ -57,6 +58,7 @@ export default function Page({
 			<div className=" h-screen col-span-6 lg:col-span-6 xl:col-span-5 ml-5 mr-5 py-5">
 				{chatBox}
 			</div>
+			<Link href="/videocall">Start Call</Link>
 		</div>
 	);
 }
