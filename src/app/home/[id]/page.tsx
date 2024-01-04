@@ -10,7 +10,7 @@ import IMessage from "@/types/IMessage";
 import { Button, Input } from "@nextui-org/react";
 import { getCookie } from "cookies-next";
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HiOutlineChevronRight, HiSearch } from "react-icons/hi";
 import { LuSendHorizonal } from "react-icons/lu";
 
@@ -25,6 +25,8 @@ export default function Page({
 	const inputRef = useRef<HTMLInputElement>(null);
 	const bottomRef = useRef<HTMLDivElement>(null);
 
+	const [content, setContent] = useState("");
+
 	const roomTitle = [uid, receiverUID].sort().join("-");
 
 	const { user } = useReceiverProfileFromID(receiverUID);
@@ -37,10 +39,15 @@ export default function Page({
 	}
 
 	function sendMessage() {
-		if (!inputRef?.current?.value) return;
+		// if (!inputRef?.current) return;
+		if (!content) return;
+		setContent("");
+
+		// const content = inputRef.current.value;
+		// inputRef.current.value = "";
 
 		const message = {
-			content: inputRef.current.value,
+			content,
 			roomID: roomId,
 			uid,
 		} as IMessage;
@@ -111,12 +118,16 @@ export default function Page({
 					</div>
 					<div className=" flex gap-5 px-3 w-full pt-4 pb-2">
 						<Input
-							ref={inputRef}
+							// ref={inputRef}
+							value={content}
+							onChange={(e) => setContent(e.target.value)}
 							type="text"
 							label=""
 							labelPlacement={"outside"}
 							startContent={<HiOutlineChevronRight size={20} />}
-							// onClear={() => inputRef.current}
+							onKeyDown={(e) => {
+								if (e.key === "Enter") sendMessage();
+							}}
 						/>
 						<Button
 							isIconOnly
