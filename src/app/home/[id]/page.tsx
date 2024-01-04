@@ -11,7 +11,7 @@ import { Button, Input } from "@nextui-org/react";
 import { getCookie } from "cookies-next";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { HiOutlineChevronRight, HiSearch } from "react-icons/hi";
+import { HiOutlineChevronRight } from "react-icons/hi";
 import { LuSendHorizonal } from "react-icons/lu";
 
 export default function Page({
@@ -22,7 +22,6 @@ export default function Page({
 	const db = getDB();
 	const uid = getCookie(COOKIES.UID) as string;
 
-	const inputRef = useRef<HTMLInputElement>(null);
 	const bottomRef = useRef<HTMLDivElement>(null);
 
 	const [content, setContent] = useState("");
@@ -39,12 +38,8 @@ export default function Page({
 	}
 
 	function sendMessage() {
-		// if (!inputRef?.current) return;
 		if (!content) return;
 		setContent("");
-
-		// const content = inputRef.current.value;
-		// inputRef.current.value = "";
 
 		const message = {
 			content,
@@ -118,7 +113,6 @@ export default function Page({
 					</div>
 					<div className=" flex gap-5 px-3 w-full pt-4 pb-2">
 						<Input
-							// ref={inputRef}
 							value={content}
 							onChange={(e) => setContent(e.target.value)}
 							type="text"
