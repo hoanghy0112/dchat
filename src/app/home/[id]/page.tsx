@@ -14,7 +14,11 @@ import { useEffect, useRef } from "react";
 import { HiOutlineChevronRight, HiSearch } from "react-icons/hi";
 import { LuSendHorizonal } from "react-icons/lu";
 
-export default function ChatBox({ receiverUID }: { receiverUID?: string }) {
+export default function Page({
+	params: { id: receiverUID },
+}: {
+	params: { id: string };
+}) {
 	const db = getDB();
 	const uid = getCookie(COOKIES.UID) as string;
 

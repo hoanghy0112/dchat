@@ -1,11 +1,9 @@
+"use client";
+
 import useChatRoomList from "@/hooks/useChatRoomList";
 import ChatRoomItem from "./ChatRoonItem";
 
-export default function ChatRoomList({
-	receiverUID,
-}: {
-	receiverUID?: string;
-}) {
+export default function ChatRoomList() {
 	const chatRooms = useChatRoomList();
 
 	return (

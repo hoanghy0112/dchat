@@ -49,7 +49,7 @@ export default function UserSearch({
 
 	const handleChoose = (uid: string) => () => {
 		setIsOpen(false);
-		router.replace(`home/?uid=${uid}`);
+		router.replace(`home/${uid}`);
 	};
 
 	return (

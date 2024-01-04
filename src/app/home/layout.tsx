@@ -1,4 +1,6 @@
+import ChatRoomList from "@/components/ChatRoomList";
 import LogoutButton from "@/components/LogoutButton";
+import UserSearch from "@/components/UserSearch";
 import { COOKIES } from "@/constants/cookies";
 import { Be_Vietnam_Pro } from "next/font/google";
 import { cookies } from "next/headers";
@@ -12,13 +14,7 @@ const font = Be_Vietnam_Pro({
 	subsets: ["latin"],
 });
 
-export default function Page({
-	chatBox,
-	chatList,
-}: {
-	chatBox: ReactNode;
-	chatList: ReactNode;
-}) {
+export default function Page({ children }: { children: ReactNode }) {
 	const photo = cookies().get(COOKIES.PHOTO)?.value || "";
 	const displayName = cookies().get(COOKIES.DISPLAY_NAME)?.value || "";
 	const email = cookies().get(COOKIES.EMAIL)?.value || "";
@@ -53,10 +49,15 @@ export default function Page({
 						<LogoutButton />
 					</div>
 				</div>
-				<div className=" flex flex-col m-5 mt-0 mr-0 ">{chatList}</div>
+				<div className=" flex flex-col m-5 mt-0 mr-0 ">
+					<div className=" flex-1">
+						<ChatRoomList />
+						<UserSearch className=" mt-5" />
+					</div>
+				</div>
 			</div>
 			<div className=" h-screen col-span-6 lg:col-span-6 xl:col-span-5 ml-5 mr-5 py-5">
-				{chatBox}
+				{children}
 			</div>
 			<Link href="/videocall">Start Call</Link>
 		</div>
