@@ -10,7 +10,7 @@ export default function useChatRoomList() {
 	const db = getDB();
 	const uid = getCookie(COOKIES.UID) as string;
 
-	const [chatRooms, setChatRooms] = useState<Map<String, IChatRoom>>(
+	const [chatRooms, setChatRooms] = useState<Map<string, IChatRoom>>(
 		new Map()
 	);
 
@@ -23,7 +23,7 @@ export default function useChatRoomList() {
 					.split(",")
 					.filter((value) => value.length > 1);
 				if (userList.length == 2 && userList.includes(uid)) {
-					chatRooms.set(data.id, data);
+					if (data?.id) chatRooms.set(data.id, data);
 					setChatRooms(new Map(chatRooms.entries()));
 				}
 			});

@@ -11,3 +11,5 @@ export default function useDB() {
 export function getDB() {
 	return db;
 }
+
+console.log({ db });

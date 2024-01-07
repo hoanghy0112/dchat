@@ -1,7 +1,8 @@
 export default interface IChatRoom {
-	id: string;
+	id?: string;
 	users?: string;
 	title?: string;
 	description?: string;
 	owner?: string;
+	isCalling?: boolean;
 }
