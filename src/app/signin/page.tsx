@@ -5,6 +5,10 @@ import { Button } from "@nextui-org/react";
 import Image from "next/image";
 import { FormEvent, ReactNode } from "react";
 import chat from "../../assets/images/Chat.svg";
+import bgImage from "../../assets/images/bgImage.svg"
+import { SiGmail } from "react-icons/si";
+import { FaFacebookF } from "react-icons/fa";
+
 
 import { COOKIES } from "@/constants/cookies";
 import { DB_KEYS } from "@/constants/dbKeys";
@@ -53,11 +57,22 @@ export default function Page({ children }: { children: ReactNode }) {
 	}
 
 	return (
-		<div className=" flex bg-background-100 w-screen h-screen items-center justify-around">
+		<div className=" flex w-screen bg-background-100 h-screen items-center justify-around">
 			<Image src={chat} alt="background" width={700} height={700} />
-			<Button className=" text-white hover:bg-hovered bg-secondary" onClick={onSignIn}>
-				Sign in with Google
-			</Button>
+			<div className=" flex flex-col relative">
+				<Image src={bgImage} alt="login" className=" shadow-lg shadow-white rounded-[20px]"/>
+				<div className=" flex flex-col absolute items-center justify-center w-full h-full pt-56">
+					
+				<Button className=" text-[#EA4335] hover:!bg-[#EA4335] bg-white m-3" color="danger" variant="ghost" onClick={onSignIn}>
+					<SiGmail className=" w-5 h-5" />
+					Sign in with Google
+				</Button>
+				<Button className=" text-[#0866FF] hover:!bg-[#0866FF] bg-white m-3" color="primary"  variant="ghost" onClick={onSignIn}>
+					<FaFacebookF className=" w-5 h-5" />
+					Sign in with Facebook
+				</Button>
+				</div>
+			</div>
 			{children}
 		</div>
 	);
