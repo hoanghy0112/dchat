@@ -24,10 +24,21 @@ export default function useCalling(receiverUID: string) {
 				if (new Date().getTime() - data.time < 20 * 1000) {
 					setIsCalling(true);
 					setOtherUID(data.uid);
+
+					// getDB()
+					// 	.get(`${uid}-call`)
+					// 	.get(otherUID)
+					// 	.on((data: { uid: string; time: number }) => {
+					// 		if (!data?.uid) return;
+					// 		if (new Date().getTime() - data.time < 20 * 1000) {
+					// 			setIsCalling(true);
+					// 			setOtherUID(data.uid);
+					// 		} else {
+					// 			setIsCalling(false);
+					// 		}
+					// 	});
 				}
 			});
-
-		if (!isCall) setIsCalling(false);
 
 		return () => {
 			getDB().get(`${uid}-call`).get(receiverUID).off();
