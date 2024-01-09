@@ -185,7 +185,7 @@ export default function Page({
 										: " justify-start pr-20"
 								}`}
 							>
-								<p className=" w-fit bg-slate-100 px-3 py-2 rounded-md hover:bg-slate-200 duration-200 cursor-pointer">
+								<p className=" w-fit bg-slate-300 px-3 py-2 rounded-xl hover:bg-slate-200 duration-200 cursor-pointer">
 									{data.content || "No content"}
 								</p>
 							</div>
@@ -193,21 +193,21 @@ export default function Page({
 						<div ref={bottomRef} />
 					</div>
 					{true ? (
-						<div className=" bg-white rounded-xl w-fit mx-auto my-5 p-5 flex justify-between items-center shadow-[-10px_-10px_60px_-20px_rgba(0,0,0,0.3),10px_10px_60px_-20px_rgba(0,0,0,0.3)]">
+						<div className=" bg-slate-300 rounded-full w-fit mx-auto my-2 p-2 flex justify-between items-center shadow-[-10px_-10px_60px_-20px_rgba(0,0,0,0.3),10px_10px_60px_-20px_rgba(0,0,0,0.3)]">
 							<div className=" flex gap-3">
 								<div
 									onClick={(e) => {
 										e.preventDefault();
 										onAnswer();
 									}}
-									className=" flex gap-2 cursor-pointer rounded-full p-3 text-green-500 bg-white hover:bg-slate-100 active:bg-slate-200 duration-200"
+									className=" flex gap-2 cursor-pointer rounded-full p-3 text-primary bg-slate-200 hover:bg-slate-100 active:bg-slate-200 duration-200"
 								>
 									Answer
 									<IoCall className="" size={20} />
 								</div>
 								<div
 									onClick={(e) => e.preventDefault()}
-									className=" cursor-pointer rounded-full p-3  text-red-500 bg-white hover:bg-slate-100 active:bg-slate-200 duration-200"
+									className=" cursor-pointer rounded-full py-3 px-4 text-white bg-secondary hover:text-secondary hover:bg-slate-100 active:bg-slate-200 duration-200"
 								>
 									<MdCallEnd size={20} />
 								</div>

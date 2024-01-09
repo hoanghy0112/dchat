@@ -20,7 +20,7 @@ export default function LogoutButton() {
 	return (
 		<div
 			onClick={() => handleLogout()}
-			className=" cursor-pointer p-2 hover:bg-slate-100 active:bg-slate-200 duration-200 rounded-xl"
+			className=" cursor-pointer p-2 hover:bg-red-400 hover:text-white active:bg-slate-200 duration-200 rounded-xl"
 		>
 			<CiLogout size={30} />
 		</div>

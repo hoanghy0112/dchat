@@ -154,7 +154,7 @@ export default function CallVideo({ receiverId, roomTitle }: PropTypes) {
 	return (
 		<Button
 			btnType={"secondary"}
-			className=" h-fit py-2"
+			className=" h-fit py-2 text-secondary hover:bg-primary hover:text-white"
 			onClick={onOpenClicked}
 		>
 			<HiMiniVideoCamera size={18} />

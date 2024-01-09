@@ -49,7 +49,7 @@ export default function UserSearch({
 
 	const handleChoose = (uid: string) => () => {
 		setIsOpen(false);
-		router.replace(`home/${uid}`);
+		router.replace(`/home/${uid}`);
 	};
 
 	return (
@@ -58,7 +58,7 @@ export default function UserSearch({
 			{...props}
 		>
 			<Button
-				color={"primary"}
+				color={"success"}
 				className=" font-medium px-5"
 				variant={"flat"}
 				startContent={<HiOutlinePlus size={20} />}
@@ -86,7 +86,7 @@ export default function UserSearch({
 								<ul className="h-full mt-5 ">
 									{userList.map(({ uid, displayName, email }) => (
 										<li
-											className=" h-full flex justify-between px-2 py-3 rounded-md hover:bg-slate-100 active:bg-slate-200 transition-all duration-200 cursor-pointer"
+											className=" h-full flex justify-between px-2 py-3 rounded-md hover:bg-slate-300 active:bg-slate-200 transition-all duration-200 cursor-pointer"
 											key={uid}
 											onClick={handleChoose(uid)}
 										>

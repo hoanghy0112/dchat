@@ -1,5 +1,6 @@
 import ChatRoomList from "@/components/ChatRoomList";
 import LogoutButton from "@/components/LogoutButton";
+import UserList from "@/components/UserList";
 import UserSearch from "@/components/UserSearch";
 import { COOKIES } from "@/constants/cookies";
 import { VideoModalProvider } from "@/contexts/VideoModalContext";
@@ -56,6 +57,7 @@ export default function Page({ children }: { children: ReactNode }) {
 						<div className=" flex-1">
 							<ChatRoomList />
 							<UserSearch className=" mt-5" />
+							<UserList />
 						</div>
 					</div>
 				</div>
