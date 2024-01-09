@@ -49,16 +49,17 @@ export function VideoModalProvider({ children }: { children: ReactNode }) {
 	}, [isAnswer]);
 
 	useEffect(() => {
+		if (!isOpen) return;
+
 		let localStream: MediaStream;
 		let remoteStream: MediaStream;
 
-		if (!isOpen) return;
-
 		const onTrack = (event: RTCTrackEvent) => {
+			console.log("track", event);
 			event.streams[0].getTracks().forEach((track) => {
 				remoteStream.addTrack(track);
 			});
-			// if (remoteVideo.current) remoteVideo.current.srcObject = remoteStream;
+			if (remoteVideo.current) remoteVideo.current.srcObject = remoteStream;
 		};
 
 		async function execute() {
@@ -77,6 +78,7 @@ export function VideoModalProvider({ children }: { children: ReactNode }) {
 			if (webcamVideo.current) webcamVideo.current.srcObject = localStream;
 			if (remoteVideo.current) remoteVideo.current.srcObject = remoteStream;
 
+			console.log({ isCalling: isCalling.current });
 			if (!isCalling.current) return;
 
 			const callDoc = doc(firestore, "calls", roomTitle);
