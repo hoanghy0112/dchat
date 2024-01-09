@@ -7,7 +7,7 @@ export default function useAnswer() {
 	const uid = getCookie(COOKIES.UID) as string;
 
 	const [isAnswer, setIsAnswer] = useState(false);
-	const [roomTitle, setRoomTitle] = useState<string>();
+	const [roomTitle, setRoomTitle] = useState<string>("");
 
 	useEffect(() => {
 		getDB()

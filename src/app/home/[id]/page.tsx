@@ -23,7 +23,7 @@ import {
 	setDoc,
 } from "firebase/firestore";
 import Image from "next/image";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { HiOutlineChevronRight } from "react-icons/hi";
 import { IoCall } from "react-icons/io5";
 import { LuSendHorizonal } from "react-icons/lu";
@@ -91,31 +91,24 @@ export default function Page({
 		autoScroll("auto");
 	}, [messages.length]);
 
-	const listener = async (event: RTCPeerConnectionIceEvent) => {
-		console.log({ event });
-		event.candidate &&
-			(await addDoc(
-				collection(firestore, "calls", roomTitle, "answerCandidates"),
-				{ ...event.candidate.toJSON(), time: new Date().getTime() }
-			));
-		// getDB()
-		// 	.get(roomTitle)
-		// 	.get("answer-candidate")
-		// 	.put({ ...event.candidate.toJSON(), isRead: false });
-	};
-
-	// useEffect(() => {
-	// 	peerConnection?.addEventListener("icecandidate", listener);
-
-	// 	return () =>
-	// 		peerConnection?.removeEventListener("icecandidate", listener);
-	// }, [roomTitle]);
+	const listener = useCallback(
+		async (event: RTCPeerConnectionIceEvent) => {
+			console.log({ event });
+			event.candidate &&
+				(await addDoc(
+					collection(firestore, "calls", roomTitle, "answerCandidates"),
+					{ ...event.candidate.toJSON(), time: new Date().getTime() }
+				));
+		},
+		[roomTitle]
+	);
 
 	async function onAnswer() {
-		onOpen();
+		onOpen(false);
 		const callDoc = doc(firestore, "calls", roomTitle);
 		const callData = (await getDoc(callDoc)).data();
-		console.log({ callData });
+
+		getDB().get(`${uid}-answer`).put({ uid, roomTitle, isAnswer: true });
 
 		if (!callData) return;
 
@@ -140,14 +133,12 @@ export default function Page({
 			collection(firestore, "calls", roomTitle, "offerCandidates"),
 			(snapshot) => {
 				snapshot.docChanges().forEach((change) => {
-					console.log({ change });
 					if (
 						change.type === "added" &&
 						change.doc.data().time &&
 						new Date().getTime() - change.doc.data().time < 20 * 1000
 					) {
 						const data = change.doc.data();
-						console.log({ offer: data });
 						getPeerConnection().addIceCandidate(
 							new RTCIceCandidate(data)
 						);
@@ -155,46 +146,6 @@ export default function Page({
 				});
 			}
 		);
-		// let isAnswer = false;
-		// let isAdd = false;
-		// getDB().get(`${uid}-answer`).put({ uid, roomTitle, isAnswer: true });
-		// getDB()
-		// 	.get(roomTitle)
-		// 	.get("offer")
-		// 	.on(async (data) => {
-		// 		if (isAnswer) return;
-		// 		isAnswer = true;
-		// 		const offerDescription = data;
-		// 		await peerConnection?.setRemoteDescription(
-		// 			new RTCSessionDescription(offerDescription)
-		// 		);
-		// 		const answerDescription = await peerConnection?.createAnswer();
-		// 		await peerConnection?.setLocalDescription(answerDescription);
-		// 		const answer = {
-		// 			type: answerDescription?.type,
-		// 			sdp: answerDescription?.sdp,
-		// 		};
-		// 		getDB()
-		// 			.get(roomTitle)
-		// 			.get("answer")
-		// 			.put(answer, async () => {
-		// 				getDB()
-		// 					.get(roomTitle)
-		// 					.get("offer-candidate")
-		// 					.on((data) => {
-		// 						if (data.isRead) return;
-		// 						getDB().get(roomTitle).get("offer-candidate").off();
-		// 						console.log({ "offer-candidate": data });
-		// 						getDB()
-		// 							.get(roomTitle)
-		// 							.get("offer-candidate")
-		// 							.put({ ...data, isRead: true }, () => {
-		// 								isAdd = true;
-		// 								peerConnection?.addIceCandidate(new RTCIceCandidate(data));
-		// 							});
-		// 					});
-		// 			});
-		// 	});
 	}
 
 	return (

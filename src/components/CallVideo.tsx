@@ -17,6 +17,7 @@ import {
 import { useContext, useEffect } from "react";
 import { HiMiniVideoCamera } from "react-icons/hi2";
 import Button from "./Button";
+import { getDB } from "@/hooks/useDB";
 
 export default function CallVideo({ receiverId, roomTitle }: PropTypes) {
 	const uid = getCookie(COOKIES.UID);
@@ -36,59 +37,60 @@ export default function CallVideo({ receiverId, roomTitle }: PropTypes) {
 	};
 
 	async function onOpenClicked() {
-		onOpen();
+		onOpen(true);
+		// getPeerConnection().addTrack(new MediaStreamTrack(), new MediaStream());
 
-		const callDoc = doc(firestore, "calls", roomTitle);
-
-		// if (uid)
-		// 	getDB()
-		// 		.get(`${receiverId}-call`)
-		// 		.get(uid)
-		// 		.put({ uid, isCalling: true });
+		if (uid)
+			getDB()
+				.get(`${receiverId}-call`)
+				.get(uid)
+				.put({ uid, time: new Date().getTime() });
 
 		// getPeerConnection().addEventListener("icecandidate", onIceCandidate);
-		getPeerConnection().onicecandidate = onIceCandidate;
-		console.log({ pc: getPeerConnection() });
 
-		// Create offer
-		const offerDescription = await getPeerConnection().createOffer();
-		await getPeerConnection().setLocalDescription(offerDescription);
+		// const callDoc = doc(firestore, "calls", roomTitle);
+		// getPeerConnection().onicecandidate = onIceCandidate;
+		// console.log({ pc: getPeerConnection() });
 
-		const offer = {
-			sdp: offerDescription?.sdp,
-			type: offerDescription?.type,
-		};
+		// // Create offer
+		// const offerDescription = await getPeerConnection().createOffer();
+		// await getPeerConnection().setLocalDescription(offerDescription);
 
-		await setDoc(callDoc, { offer }, { merge: false });
+		// const offer = {
+		// 	sdp: offerDescription?.sdp,
+		// 	type: offerDescription?.type,
+		// };
 
-		onSnapshot(callDoc, (snapshot) => {
-			const data = snapshot.data();
-			if (!getPeerConnection().currentRemoteDescription && data?.answer) {
-				const answerDescription = new RTCSessionDescription(data.answer);
-				console.log({ answerDescription });
-				getPeerConnection().setRemoteDescription(answerDescription);
-			}
-		});
+		// await setDoc(callDoc, { offer }, { merge: false });
 
-		// When answered, add candidate to peer connection
-		onSnapshot(
-			query(collection(firestore, "calls", roomTitle, "answerCandidates")),
-			{ includeMetadataChanges: true },
-			(snapshot) => {
-				snapshot.docChanges().forEach((change) => {
-					if (
-						change.type === "added" &&
-						change.doc.data().time &&
-						new Date().getTime() - change.doc.data().time < 20 * 1000
-					) {
-						const data = change.doc.data();
-						console.log({ answer: data });
-						const candidate = new RTCIceCandidate(data);
-						getPeerConnection().addIceCandidate(candidate);
-					}
-				});
-			}
-		);
+		// onSnapshot(callDoc, (snapshot) => {
+		// 	const data = snapshot.data();
+		// 	if (!getPeerConnection().currentRemoteDescription && data?.answer) {
+		// 		const answerDescription = new RTCSessionDescription(data.answer);
+		// 		console.log({ answerDescription });
+		// 		getPeerConnection().setRemoteDescription(answerDescription);
+		// 	}
+		// });
+
+		// // When answered, add candidate to peer connection
+		// onSnapshot(
+		// 	query(collection(firestore, "calls", roomTitle, "answerCandidates")),
+		// 	{ includeMetadataChanges: true },
+		// 	(snapshot) => {
+		// 		snapshot.docChanges().forEach((change) => {
+		// 			if (
+		// 				change.type === "added" &&
+		// 				change.doc.data().time &&
+		// 				new Date().getTime() - change.doc.data().time < 20 * 1000
+		// 			) {
+		// 				const data = change.doc.data();
+		// 				console.log({ answer: data });
+		// 				const candidate = new RTCIceCandidate(data);
+		// 				getPeerConnection().addIceCandidate(candidate);
+		// 			}
+		// 		});
+		// 	}
+		// );
 
 		// onSnapshot(
 		// 	(snapshot) => {

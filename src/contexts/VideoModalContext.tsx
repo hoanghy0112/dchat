@@ -14,9 +14,19 @@ import {
 import { getCookie } from "cookies-next";
 import { useEffect, useRef } from "react";
 import getPeerConnection from "@/services/rtc/connection";
+import {
+	addDoc,
+	collection,
+	doc,
+	onSnapshot,
+	query,
+	setDoc,
+} from "firebase/firestore";
+import { firestore } from "@/services/firebase";
 
 const defaultValue: IVideoModalContext = {
 	isOpen: false,
+	isCalling: false,
 	onOpen: () => {},
 	onClose: () => {},
 };
@@ -26,6 +36,7 @@ export const VideoModalContext =
 
 export function VideoModalProvider({ children }: { children: ReactNode }) {
 	const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+	const isCalling = useRef(false);
 	const uid = getCookie(COOKIES.UID) as string;
 
 	const webcamVideo = useRef<HTMLVideoElement>(null);
@@ -38,10 +49,10 @@ export function VideoModalProvider({ children }: { children: ReactNode }) {
 	}, [isAnswer]);
 
 	useEffect(() => {
-		// if (!isOpen) return;
-
 		let localStream: MediaStream;
 		let remoteStream: MediaStream;
+
+		if (!isOpen) return;
 
 		const onTrack = (event: RTCTrackEvent) => {
 			event.streams[0].getTracks().forEach((track) => {
@@ -65,6 +76,66 @@ export function VideoModalProvider({ children }: { children: ReactNode }) {
 
 			if (webcamVideo.current) webcamVideo.current.srcObject = localStream;
 			if (remoteVideo.current) remoteVideo.current.srcObject = remoteStream;
+
+			if (!isCalling.current) return;
+
+			const callDoc = doc(firestore, "calls", roomTitle);
+			const onIceCandidate = (event: RTCPeerConnectionIceEvent) => {
+				console.log({ event });
+				if (event.candidate) {
+					addDoc(
+						collection(firestore, "calls", roomTitle, "offerCandidates"),
+						{
+							...event.candidate.toJSON(),
+							time: new Date().getTime(),
+						}
+					);
+				}
+			};
+			getPeerConnection().onicecandidate = onIceCandidate;
+			console.log({ pc: getPeerConnection() });
+
+			// Create offer
+			const offerDescription = await getPeerConnection().createOffer();
+			await getPeerConnection().setLocalDescription(offerDescription);
+
+			const offer = {
+				sdp: offerDescription?.sdp,
+				type: offerDescription?.type,
+			};
+
+			await setDoc(callDoc, { offer }, { merge: false });
+
+			onSnapshot(callDoc, (snapshot) => {
+				const data = snapshot.data();
+				if (!getPeerConnection().currentRemoteDescription && data?.answer) {
+					const answerDescription = new RTCSessionDescription(data.answer);
+					console.log({ answerDescription });
+					getPeerConnection().setRemoteDescription(answerDescription);
+				}
+			});
+
+			// When answered, add candidate to peer connection
+			onSnapshot(
+				query(
+					collection(firestore, "calls", roomTitle, "answerCandidates")
+				),
+				{ includeMetadataChanges: true },
+				(snapshot) => {
+					snapshot.docChanges().forEach((change) => {
+						if (
+							change.type === "added" &&
+							change.doc.data().time &&
+							new Date().getTime() - change.doc.data().time < 20 * 1000
+						) {
+							const data = change.doc.data();
+							console.log({ answer: data });
+							const candidate = new RTCIceCandidate(data);
+							getPeerConnection().addIceCandidate(candidate);
+						}
+					});
+				}
+			);
 		}
 
 		execute();
@@ -73,15 +144,23 @@ export function VideoModalProvider({ children }: { children: ReactNode }) {
 			// localStream.getTracks().forEach(function (track) {
 			// 	track.stop();
 			// });
-
 			// getPeerConnection().removeEventListener("track", onTrack);
-
 			// if (roomTitle) getDB().get(roomTitle).get("answer").put(null);
 		};
 	}, [isOpen]);
 
 	return (
-		<VideoModalContext.Provider value={{ isOpen, onOpen, onClose }}>
+		<VideoModalContext.Provider
+			value={{
+				isOpen,
+				onOpen: (calling = false) => {
+					onOpen();
+					isCalling.current = calling;
+				},
+				onClose,
+				isCalling: isCalling?.current || false,
+			}}
+		>
 			{children}
 			<Modal
 				className="h-full"
@@ -127,6 +206,7 @@ export function VideoModalProvider({ children }: { children: ReactNode }) {
 
 type IVideoModalContext = {
 	isOpen: boolean;
-	onOpen: () => any;
+	isCalling: boolean;
+	onOpen: (v?: boolean) => any;
 	onClose: () => any;
 };
