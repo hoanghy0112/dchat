@@ -157,6 +157,16 @@ export function VideoModalProvider({ children }: { children: ReactNode }) {
 			localStream.getTracks().forEach(function (track) {
 				track.stop();
 			});
+			getDB()
+				.get(
+					`${roomTitleRef.current.split("-").find((_) => _ != uid)}-call`
+				)
+				.get(uid)
+				.put({ uid, time: new Date().getTime() - 100 * 1000 });
+			getDB()
+				.get(`${uid}-call`)
+				.get(roomTitleRef.current.split("-").find((_) => _ != uid) || "")
+				.put({ uid, time: new Date().getTime() - 100 * 1000 });
 			// getPeerConnection().removeEventListener("track", onTrack);
 			// if (roomTitle) getDB().get(roomTitle).get("answer").put(null);
 		};

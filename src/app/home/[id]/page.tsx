@@ -43,7 +43,7 @@ export default function Page({
 
 	const roomTitle = [uid, receiverUID].sort().join("-");
 
-	const isCalling = useCalling(receiverUID);
+	const [isCalling, otherUID] = useCalling(receiverUID);
 
 	const { user } = useReceiverProfileFromID(receiverUID);
 	const { room, roomId } = useChatRoomProfile(receiverUID || "");
@@ -104,6 +104,8 @@ export default function Page({
 	);
 
 	async function onAnswer() {
+		const roomTitle = [uid, otherUID].sort().join("-");
+
 		onOpen(false);
 		const callDoc = doc(firestore, "calls", roomTitle);
 		const callData = (await getDoc(callDoc)).data();
@@ -192,7 +194,7 @@ export default function Page({
 						))}
 						<div ref={bottomRef} />
 					</div>
-					{true ? (
+					{isCalling ? (
 						<div className=" bg-slate-300 rounded-full w-fit mx-auto my-2 p-2 flex justify-between items-center shadow-[-10px_-10px_60px_-20px_rgba(0,0,0,0.3),10px_10px_60px_-20px_rgba(0,0,0,0.3)]">
 							<div className=" flex gap-3">
 								<div

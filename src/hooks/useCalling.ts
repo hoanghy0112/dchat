@@ -7,24 +7,32 @@ export default function useCalling(receiverUID: string) {
 	const uid = getCookie(COOKIES.UID) as string;
 
 	const [isCalling, setIsCalling] = useState(false);
+	const [otherUID, setOtherUID] = useState("");
 
 	useEffect(() => {
-		if (!receiverUID || !uid) return;
+		if (!uid) return;
 
 		// console.log({ state: peerConnection?.signalingState });
 
+		let isCall = false;
+
 		getDB()
 			.get(`${uid}-call`)
-			.get(receiverUID)
-			.on((data: { uid: string; isCalling: boolean }) => {
+			.map()
+			.on((data: { uid: string; time: number }) => {
 				if (!data?.uid) return;
-				setIsCalling(data.isCalling);
+				if (new Date().getTime() - data.time < 20 * 1000) {
+					setIsCalling(true);
+					setOtherUID(data.uid);
+				}
 			});
+
+		if (!isCall) setIsCalling(false);
 
 		return () => {
 			getDB().get(`${uid}-call`).get(receiverUID).off();
 		};
-	}, [receiverUID, uid]);
+	}, [uid]);
 
-	return isCalling;
+	return [isCalling, otherUID];
 }
