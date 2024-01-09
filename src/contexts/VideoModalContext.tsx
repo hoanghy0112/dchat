@@ -79,8 +79,8 @@ export function VideoModalProvider({ children }: { children: ReactNode }) {
 			if (webcamVideo.current) webcamVideo.current.srcObject = localStream;
 			if (remoteVideo.current) remoteVideo.current.srcObject = remoteStream;
 
-			console.log({ isCalling: isCalling.current });
-			if (!isCalling.current || roomTitleRef.current) return;
+			console.log({ isCalling: isCalling.current, roomTitleRef });
+			if (!isCalling.current || !roomTitleRef.current) return;
 
 			const callDoc = doc(firestore, "calls", roomTitleRef.current);
 			const onIceCandidate = (event: RTCPeerConnectionIceEvent) => {
