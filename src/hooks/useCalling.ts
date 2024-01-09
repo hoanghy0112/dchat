@@ -1,6 +1,5 @@
 import { COOKIES } from "@/constants/cookies";
 import { getDB } from "@/hooks/useDB";
-import peerConnection from "@/services/rtc/connection";
 import { getCookie } from "cookies-next";
 import { useEffect, useState } from "react";
 
@@ -12,7 +11,7 @@ export default function useCalling(receiverUID: string) {
 	useEffect(() => {
 		if (!receiverUID || !uid) return;
 
-		console.log({ state: peerConnection?.signalingState });
+		// console.log({ state: peerConnection?.signalingState });
 
 		getDB()
 			.get(`${uid}-call`)

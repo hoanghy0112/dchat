@@ -13,7 +13,7 @@ const servers = {
 class PeerConnection {
 	_peerConnection: RTCPeerConnection | null = null;
 
-	public get peerConnection(): RTCPeerConnection {
+	public peerConnection(): RTCPeerConnection {
 		if (this._peerConnection == null) {
 			this._peerConnection = new RTCPeerConnection(servers);
 		}
@@ -23,6 +23,6 @@ class PeerConnection {
 
 const _ = new PeerConnection();
 
-const peerConnection = _.peerConnection;
+const getPeerConnection = _.peerConnection.bind(_);
 
-export default peerConnection;
+export default getPeerConnection;

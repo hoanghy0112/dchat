@@ -5,7 +5,6 @@ import React, { ReactNode, createContext, useState } from "react";
 import { COOKIES } from "@/constants/cookies";
 import useAnswer from "@/hooks/useAnswer";
 import { getDB } from "@/hooks/useDB";
-import peerConnection from "@/services/rtc/connection";
 import {
 	Modal,
 	ModalBody,
@@ -14,6 +13,7 @@ import {
 } from "@nextui-org/react";
 import { getCookie } from "cookies-next";
 import { useEffect, useRef } from "react";
+import getPeerConnection from "@/services/rtc/connection";
 
 const defaultValue: IVideoModalContext = {
 	isOpen: false,
@@ -38,17 +38,16 @@ export function VideoModalProvider({ children }: { children: ReactNode }) {
 	}, [isAnswer]);
 
 	useEffect(() => {
-		if (!isOpen) return;
+		// if (!isOpen) return;
 
 		let localStream: MediaStream;
 		let remoteStream: MediaStream;
 
 		const onTrack = (event: RTCTrackEvent) => {
-			console.log("trach ne");
 			event.streams[0].getTracks().forEach((track) => {
-				console.log({ track });
 				remoteStream.addTrack(track);
 			});
+			// if (remoteVideo.current) remoteVideo.current.srcObject = remoteStream;
 		};
 
 		async function execute() {
@@ -59,10 +58,10 @@ export function VideoModalProvider({ children }: { children: ReactNode }) {
 			remoteStream = new MediaStream();
 
 			localStream.getTracks().forEach((track) => {
-				peerConnection?.addTrack(track, localStream);
+				getPeerConnection().addTrack(track, localStream);
 			});
 
-			peerConnection?.addEventListener("track", onTrack);
+			getPeerConnection().addEventListener("track", onTrack);
 
 			if (webcamVideo.current) webcamVideo.current.srcObject = localStream;
 			if (remoteVideo.current) remoteVideo.current.srcObject = remoteStream;
@@ -71,13 +70,13 @@ export function VideoModalProvider({ children }: { children: ReactNode }) {
 		execute();
 
 		return () => {
-			localStream.getTracks().forEach(function (track) {
-				track.stop();
-			});
+			// localStream.getTracks().forEach(function (track) {
+			// 	track.stop();
+			// });
 
-			peerConnection?.removeEventListener("track", onTrack);
+			// getPeerConnection().removeEventListener("track", onTrack);
 
-			if (roomTitle) getDB().get(roomTitle).get("answer").put(null);
+			// if (roomTitle) getDB().get(roomTitle).get("answer").put(null);
 		};
 	}, [isOpen]);
 

@@ -10,7 +10,7 @@ import useChatRoomProfile from "@/hooks/useChatRoomProfile";
 import { getDB } from "@/hooks/useDB";
 import { useReceiverProfileFromID } from "@/hooks/useReceiverProfile";
 import { firestore } from "@/services/firebase";
-import peerConnection from "@/services/rtc/connection";
+import getPeerConnection from "@/services/rtc/connection";
 import IMessage from "@/types/IMessage";
 import { Button, Input } from "@nextui-org/react";
 import { getCookie } from "cookies-next";
@@ -91,23 +91,25 @@ export default function Page({
 		autoScroll("auto");
 	}, [messages.length]);
 
-	useEffect(() => {
-		const listener = async (event: RTCPeerConnectionIceEvent) => {
-			event.candidate &&
-				(await addDoc(
-					collection(firestore, "calls", roomTitle, "answerCandidates"),
-					event.candidate.toJSON()
-				));
-			// getDB()
-			// 	.get(roomTitle)
-			// 	.get("answer-candidate")
-			// 	.put({ ...event.candidate.toJSON(), isRead: false });
-		};
-		peerConnection?.addEventListener("icecandidate", listener);
+	const listener = async (event: RTCPeerConnectionIceEvent) => {
+		console.log({ event });
+		event.candidate &&
+			(await addDoc(
+				collection(firestore, "calls", roomTitle, "answerCandidates"),
+				{ ...event.candidate.toJSON(), time: new Date().getTime() }
+			));
+		// getDB()
+		// 	.get(roomTitle)
+		// 	.get("answer-candidate")
+		// 	.put({ ...event.candidate.toJSON(), isRead: false });
+	};
 
-		return () =>
-			peerConnection?.removeEventListener("icecandidate", listener);
-	}, [roomTitle]);
+	// useEffect(() => {
+	// 	peerConnection?.addEventListener("icecandidate", listener);
+
+	// 	return () =>
+	// 		peerConnection?.removeEventListener("icecandidate", listener);
+	// }, [roomTitle]);
 
 	async function onAnswer() {
 		onOpen();
@@ -117,13 +119,15 @@ export default function Page({
 
 		if (!callData) return;
 
+		getPeerConnection().addEventListener("icecandidate", listener);
+
 		const offerDescription = callData.offer;
-		await peerConnection.setRemoteDescription(
+		await getPeerConnection().setRemoteDescription(
 			new RTCSessionDescription(offerDescription)
 		);
 
-		const answerDescription = await peerConnection.createAnswer();
-		await peerConnection.setLocalDescription(answerDescription);
+		const answerDescription = await getPeerConnection().createAnswer();
+		await getPeerConnection().setLocalDescription(answerDescription);
 
 		const answer = {
 			type: answerDescription.type,
@@ -137,9 +141,16 @@ export default function Page({
 			(snapshot) => {
 				snapshot.docChanges().forEach((change) => {
 					console.log({ change });
-					if (change.type === "added") {
-						let data = change.doc.data();
-						peerConnection.addIceCandidate(new RTCIceCandidate(data));
+					if (
+						change.type === "added" &&
+						change.doc.data().time &&
+						new Date().getTime() - change.doc.data().time < 20 * 1000
+					) {
+						const data = change.doc.data();
+						console.log({ offer: data });
+						getPeerConnection().addIceCandidate(
+							new RTCIceCandidate(data)
+						);
 					}
 				});
 			}
