@@ -55,8 +55,8 @@ export default function Page({ children }: { children: ReactNode }) {
 					</div>
 					<div className=" flex flex-col m-5 mt-0 mr-0 ">
 						<div className=" flex-1">
-							<ChatRoomList />
-							<UserSearch className=" mt-5" />
+							{/* <ChatRoomList /> */}
+							<UserSearch className=" mb-5" />
 							<UserList />
 						</div>
 					</div>

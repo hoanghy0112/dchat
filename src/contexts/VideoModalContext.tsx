@@ -154,9 +154,9 @@ export function VideoModalProvider({ children }: { children: ReactNode }) {
 		execute();
 
 		return () => {
-			// localStream.getTracks().forEach(function (track) {
-			// 	track.stop();
-			// });
+			localStream.getTracks().forEach(function (track) {
+				track.stop();
+			});
 			// getPeerConnection().removeEventListener("track", onTrack);
 			// if (roomTitle) getDB().get(roomTitle).get("answer").put(null);
 		};
