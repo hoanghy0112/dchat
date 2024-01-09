@@ -37,7 +37,7 @@ export default function CallVideo({ receiverId, roomTitle }: PropTypes) {
 	};
 
 	async function onOpenClicked() {
-		onOpen(true);
+		onOpen(true, roomTitle);
 		// getPeerConnection().addTrack(new MediaStreamTrack(), new MediaStream());
 
 		if (uid)

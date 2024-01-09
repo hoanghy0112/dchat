@@ -37,16 +37,17 @@ export const VideoModalContext =
 export function VideoModalProvider({ children }: { children: ReactNode }) {
 	const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 	const isCalling = useRef(false);
+	const roomTitleRef = useRef("");
 	const uid = getCookie(COOKIES.UID) as string;
 
 	const webcamVideo = useRef<HTMLVideoElement>(null);
 	const remoteVideo = useRef<HTMLVideoElement>(null);
 
-	const { isAnswer, roomTitle } = useAnswer();
+	// const { isAnswer, roomTitle } = useAnswer();
 
-	useEffect(() => {
-		if (isAnswer) onOpen();
-	}, [isAnswer]);
+	// useEffect(() => {
+	// 	if (isAnswer) onOpen();
+	// }, [isAnswer]);
 
 	useEffect(() => {
 		if (!isOpen) return;
@@ -79,14 +80,19 @@ export function VideoModalProvider({ children }: { children: ReactNode }) {
 			if (remoteVideo.current) remoteVideo.current.srcObject = remoteStream;
 
 			console.log({ isCalling: isCalling.current });
-			if (!isCalling.current) return;
+			if (!isCalling.current || roomTitleRef.current) return;
 
-			const callDoc = doc(firestore, "calls", roomTitle);
+			const callDoc = doc(firestore, "calls", roomTitleRef.current);
 			const onIceCandidate = (event: RTCPeerConnectionIceEvent) => {
 				console.log({ event });
 				if (event.candidate) {
 					addDoc(
-						collection(firestore, "calls", roomTitle, "offerCandidates"),
+						collection(
+							firestore,
+							"calls",
+							roomTitleRef.current,
+							"offerCandidates"
+						),
 						{
 							...event.candidate.toJSON(),
 							time: new Date().getTime(),
@@ -120,7 +126,12 @@ export function VideoModalProvider({ children }: { children: ReactNode }) {
 			// When answered, add candidate to peer connection
 			onSnapshot(
 				query(
-					collection(firestore, "calls", roomTitle, "answerCandidates")
+					collection(
+						firestore,
+						"calls",
+						roomTitleRef.current,
+						"answerCandidates"
+					)
 				),
 				{ includeMetadataChanges: true },
 				(snapshot) => {
@@ -155,9 +166,10 @@ export function VideoModalProvider({ children }: { children: ReactNode }) {
 		<VideoModalContext.Provider
 			value={{
 				isOpen,
-				onOpen: (calling = false) => {
+				onOpen: (calling = false, roomTitle = "") => {
 					onOpen();
 					isCalling.current = calling;
+					roomTitleRef.current = roomTitle;
 				},
 				onClose,
 				isCalling: isCalling?.current || false,
@@ -209,6 +221,6 @@ export function VideoModalProvider({ children }: { children: ReactNode }) {
 type IVideoModalContext = {
 	isOpen: boolean;
 	isCalling: boolean;
-	onOpen: (v?: boolean) => any;
+	onOpen: (v?: boolean, r?: string) => any;
 	onClose: () => any;
 };
