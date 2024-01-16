@@ -18,14 +18,13 @@ export default function Page() {
 		(text: string) => {
 			if (!uid) return;
 
-			const key = new Date().toISOString();
 			const value: IFeed = {
 				date: new Date().toISOString(),
 				content: text,
 				isVisible: true,
 				uid: uid?.toString(),
 			};
-			addCollectionData(COLLECTIONS.FEED)(key, value);
+			addCollectionData([COLLECTIONS.FEED])(value);
 		},
 		[uid]
 	);
@@ -34,7 +33,6 @@ export default function Page() {
 		(e) => {
 			e.preventDefault();
 			const value = contentRef.current?.value;
-			console.log({ value });
 			if (!value) {
 				alert("Content must not be empty");
 				return;

@@ -12,5 +12,5 @@ export interface IComment {
 	content: string;
 	uid: string;
 	isVisible: boolean;
-	date: Date;
+	date: string;
 }

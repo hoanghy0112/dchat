@@ -30,7 +30,7 @@ export function useCollectionList<T>(refList: string[]): { data: T[] } {
 
 	useDeepCompareEffect(() => {
 		if (refList.length % 2 != 1) {
-			console.error("Ref list in collection must be an odd number");
+			console.error("Ref list in collection list must be an odd number");
 			return;
 		}
 
@@ -52,22 +52,53 @@ export function useCollectionList<T>(refList: string[]): { data: T[] } {
 	return { data: Array.from(data.values()) };
 }
 
-export const addCollectionData =
-	(collection: string) => (key: string, value: any) => {
-		console.log({ abc: value, key });
-		getDB().get(collection).get(key).put(value);
-	};
+export const addCollectionData = (collections: string[]) => (value: any) => {
+	if (collections.length % 2 != 1) {
+		console.error(
+			"addCollectionData: collections length must be an odd number"
+		);
+		return;
+	}
+	if (!value.date) {
+		console.error("addCollectionData: value does not contain date field");
+		return;
+	}
+
+	let dbRef = getDB().get(collections[0]);
+	collections.slice(1).forEach((ref) => (dbRef = dbRef.get(ref)));
+	const date = new Date().toISOString();
+	dbRef.get(value.date).put({ ...value });
+	return date;
+};
 
 export function useItem<T>(collection: string, id: string) {
 	const [data, setData] = useState<T>();
+
 	useEffect(() => {
 		getDB()
 			.get(collection)
 			.get(id)
-			.once((data) => {
+			.on((data) => {
 				setData(data);
 			});
 	}, [collection, id]);
 
 	return [data];
+}
+
+export function useCollectionItem<T>(refList: string[]): T | undefined {
+	const [data, setData] = useState<T>();
+
+	useDeepCompareEffect(() => {
+		if (refList.length % 2 != 0) {
+			console.error("Ref list in collection item must be an even number");
+			return;
+		}
+
+		let dbRef = getDB().get(refList[0]);
+		refList.slice(1).forEach((ref) => (dbRef = dbRef.get(ref)));
+		dbRef.on((data) => setData(data));
+	}, [refList]);
+
+	return data;
 }
