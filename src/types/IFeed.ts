@@ -1,6 +1,7 @@
 export default interface IFeed {
 	date: string;
 	content: string;
+	images?: string;
 	isVisible: boolean;
 	uid: string;
 }
