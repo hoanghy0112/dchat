@@ -24,6 +24,10 @@ const config: Config = {
 		},
 		screens: {
 			'mobile': '320px',
+			'mobile2' : '425px',
+			'sm': '640px',
+			'md': '1024px',
+			'lg': '1280px',
 		}
 	},
 	plugins: [nextui()],
