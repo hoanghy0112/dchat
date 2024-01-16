@@ -3,7 +3,7 @@
 import COLLECTIONS from "@/constants/collection";
 import { DB_KEYS } from "@/constants/dbKeys";
 import { addCollectionData, useCollectionList, useItem } from "@/hooks/useData";
-import IFeed, { IComment } from "@/types/IFeed";
+import IFeed, { IComment, ILike } from "@/types/IFeed";
 import IUser from "@/types/IUser";
 import Image from "next/image";
 import CommentItem from "./CommentItem";
@@ -46,18 +46,34 @@ export default function FeedItem({
 				value
 			);
 		},
-		[uid]
+		[currentUID, date]
 	);
 
-	const onSubmit = useCallback<FormEventHandler<HTMLFormElement>>((e) => {
-		e.preventDefault();
-		const value = commentRef.current?.value;
-		if (!value) {
-			alert("Content must not be empty");
-			return;
-		}
-		addComment(value);
-	}, []);
+	const addLike = useCallback(() => {
+		if (!currentUID) return;
+
+		console.log({ likes });
+		if (likes.some(({ uid }) => uid == currentUID)) return;
+
+		const value: ILike = {
+			date: new Date().toISOString(),
+			uid: currentUID?.toString(),
+		};
+		addCollectionData([COLLECTIONS.FEED, date, COLLECTIONS.LIKES])(value);
+	}, [currentUID, date, likes]);
+
+	const onSubmit = useCallback<FormEventHandler<HTMLFormElement>>(
+		(e) => {
+			e.preventDefault();
+			const value = commentRef.current?.value;
+			if (!value) {
+				alert("Content must not be empty");
+				return;
+			}
+			addComment(value);
+		},
+		[addComment]
+	);
 
 	return (
 		<div>
@@ -78,6 +94,9 @@ export default function FeedItem({
 			) : null}
 			<p>{content}</p>
 			<div className=" flex justify-between">
+				<button className=" bg-red-500" onClick={addLike}>
+					Like post
+				</button>
 				<p>{likes.length} likes</p>
 				<div>
 					<form onSubmit={onSubmit}>

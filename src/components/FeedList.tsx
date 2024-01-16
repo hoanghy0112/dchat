@@ -5,7 +5,6 @@ import FeedItem from "./FeedItem";
 
 export default function FeedList() {
 	const { data: feeds } = useCollectionList<IFeed>([COLLECTIONS.FEED]);
-	console.log({ feeds });
 
 	return (
 		<div className=" flex flex-col gap-5">

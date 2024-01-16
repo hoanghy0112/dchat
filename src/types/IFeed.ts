@@ -1,7 +1,4 @@
-import IUser from "./IUser";
-
 export default interface IFeed {
-	// id: string;
 	date: string;
 	content: string;
 	isVisible: boolean;
@@ -12,5 +9,10 @@ export interface IComment {
 	content: string;
 	uid: string;
 	isVisible: boolean;
+	date: string;
+}
+
+export interface ILike {
+	uid: string;
 	date: string;
 }
