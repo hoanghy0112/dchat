@@ -1,11 +1,8 @@
-import { COOKIES } from "@/constants/cookies";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { cookies } from "next/headers";
 import { ReactNode } from "react";
 
 import "./globals.css";
-import { redirect } from "next/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 

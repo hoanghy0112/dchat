@@ -29,11 +29,19 @@ import { IoCall } from "react-icons/io5";
 import { LuSendHorizonal } from "react-icons/lu";
 import { MdCallEnd } from "react-icons/md";
 
+import {
+	BrowserView,
+	MobileView,
+	isBrowser,
+	isMobile,
+} from "react-device-detect";
+
 export default function Page({
 	params: { id: receiverUID },
 }: {
 	params: { id: string };
 }) {
+
 	const db = getDB();
 	const uid = getCookie(COOKIES.UID) as string;
 
