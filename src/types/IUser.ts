@@ -8,11 +8,11 @@ export default interface IUser {
 export interface IRequest {
 	uid: string;
 	date: string;
-	state: "pending" | "accept" | "reject";
+	state: "pending" | "accept" | "reject" | "abort";
 }
 
 export interface IInvitation {
 	uid: string;
 	date: string;
-	state: "pending" | "accept" | "reject";
+	state: "pending" | "accept" | "reject" | "abort";
 }

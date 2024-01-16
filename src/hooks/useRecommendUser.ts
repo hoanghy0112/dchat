@@ -27,7 +27,9 @@ export default function useRecommendUser(): IUser[] {
 	return users.filter(
 		(user) =>
 			friends.every((friend) => friend.uid != user.uid) &&
-			requests.every((request) => request.uid != user.uid) &&
+			requests.every(
+				(request) => request.uid != user.uid || request.state == "reject"
+			) &&
 			user.uid != currentUID
 	);
 }

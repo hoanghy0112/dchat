@@ -22,16 +22,18 @@ export default function Page() {
 	const users = useRecommendUser();
 
 	const addRequest = useCallback((uid: string) => {
-		const value: IRequest = {
+		toast.success("Invitation is sent");
+		setSended((prev: number) => prev + 1);
+		addCollectionData([COLLECTIONS.USERS, currentUID, COLLECTIONS.REQUESTS])({
 			uid,
 			date: new Date().toISOString(),
 			state: "pending",
-		};
-		toast.success("Invitation is sent");
-		setSended((prev: number) => prev + 1);
-		// addCollectionData([COLLECTIONS.USERS, currentUID, COLLECTIONS.REQUESTS])(
-		// 	value
-		// );
+		});
+		addCollectionData([COLLECTIONS.USERS, uid, COLLECTIONS.INVITATION])({
+			uid: currentUID,
+			date: new Date().toISOString(),
+			state: "pending",
+		});
 	}, []);
 
 	return (
