@@ -9,7 +9,7 @@ export default function UserCardInner({
 	return (
 		<div
 			key={email}
-			className=" bg-white overflow-hidden w-[250px] h-[350px] flex flex-col items-center justify-center font-semibold text-xl shadow-lg rounded-lg"
+			className=" bg-white overflow-hidden w-[250px] h-[350px] flex flex-col items-center justify-center font-semibold text-xl shadow-sm rounded-lg"
 			data-value="waffles"
 		>
 			<div className=" flex-1"></div>
