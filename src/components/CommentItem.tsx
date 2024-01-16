@@ -17,18 +17,20 @@ export default function CommentItem({
 			{user ? (
 				<>
 					<Image
-						className=" rounded-full"
+						className=" rounded-full relative mobile:w-12 mobile:h-12"
 						src={user.photo || ""}
 						width={50}
 						height={50}
 						alt={""}
 					/>
-					<div className=" mx-3 bg-slate-300 rounded-md">
-						<div className=" mx-3 flex gap-5 justify-center items-center">
-							<p className=" font-semibold">{user?.displayName}</p>
-							<p className=" text-sm">{date.slice(0, 10)}<span>:{date.slice(11, 16)}</span></p>
+					<div className=" mx-3 mobile:mx-2 bg-slate-300 rounded-md mobile:w-3/4">
+						<div className=" mx-3 flex gap-5 mobile:gap-0 items-center">
+							<p className=" font-semibold mobile:text-sm">{user?.displayName}</p>
+							<p className=" text-sm mobile:text-xs">{date.slice(0, 10)}<span> {date.slice(11, 16)}</span></p>
 						</div>
-						<p className=" mx-3">{content}</p>
+						<div className=" mx-3 flex flex-wrap-reverse whitespace-break-spaces mobile:w-max-3/4">
+							<p className=" text-wrap mobile:text-sm mobile:max-w-full">{content}</p>
+						</div>
 					</div>
 				</>
 			) : null}
