@@ -4,3 +4,15 @@ export default interface IUser {
 	email: string;
 	photo?: string;
 }
+
+export interface IRequest {
+	uid: string;
+	date: string;
+	state: "pending" | "accept" | "reject";
+}
+
+export interface IInvitation {
+	uid: string;
+	date: string;
+	state: "pending" | "accept" | "reject";
+}

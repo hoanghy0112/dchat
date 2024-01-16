@@ -28,7 +28,7 @@ export const UserStack = ({
 
 	return (
 		<div
-			className=" w-full h-full overflow-hidden flex justify-center items-center relative"
+			className=" w-full flex-1 overflow-hidden flex justify-center items-center relative"
 			{...props}
 		>
 			{stack.map((item, index) => {

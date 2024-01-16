@@ -9,6 +9,7 @@ import { cookies } from "next/headers";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
+import { Toaster } from "react-hot-toast";
 
 const font = Be_Vietnam_Pro({
 	weight: ["400", "500", "600", "700"],
