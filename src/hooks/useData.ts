@@ -25,7 +25,10 @@ export function useList<T>(collection: string): { data: T[] } {
 	return { data: Array.from(data.values()) };
 }
 
-export function useCollectionList<T>(refList: string[]): { data: T[] } {
+export function useCollectionList<T>(
+	refList: string[],
+	key = "date"
+): { data: T[] } {
 	const [data, setData] = useState<Map<string, T>>(new Map());
 
 	useDeepCompareEffect(() => {
@@ -39,11 +42,11 @@ export function useCollectionList<T>(refList: string[]): { data: T[] } {
 		dbRef.map().on((data) => {
 			setData((prev) => {
 				const newMap = new Map(prev.entries());
-				if (!data.date) {
-					console.error("Date not found in data");
-					return newMap;
-				}
-				newMap.set(data.date, data);
+				// if (!data.date) {
+				// 	console.error("Date not found in data");
+				// 	return newMap;
+				// }
+				newMap.set(data[key], data);
 				return newMap;
 			});
 		});
