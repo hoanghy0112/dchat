@@ -57,10 +57,10 @@ export default function Page({ children }: { children: ReactNode }) {
 	}
 
 	return (
-		<div className=" flex w-screen bg-background-100 h-screen items-center justify-around">
+		<div className=" flex w-screen bg-background-100 h-screen items-center md:justify-around justify-start">
 			<Image src={chat} alt="background" width={700} height={700} />
-			<div className=" flex flex-col relative">
-				<Image src={bgImage} alt="login" className=" shadow-lg shadow-white rounded-[20px]"/>
+			<div className=" flex flex-col relative  mobile:max-md:absolute mobile:max-md:items-center mobile:max-md:w-full mobile:max-md:h-full">
+				<Image src={bgImage} alt="login" width={300} height={300} className=" shadow-lg shadow-white rounded-5"/>
 				<div className=" flex flex-col absolute items-center justify-center w-full h-full pt-56">
 					
 				<Button className=" text-[#EA4335] hover:!bg-[#EA4335] bg-white m-3" color="danger" variant="ghost" onClick={onSignIn}>

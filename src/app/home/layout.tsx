@@ -26,8 +26,8 @@ export default function Page({ children }: { children: ReactNode }) {
 
 	return (
 		<VideoModalProvider>
-			<div className="w-screen h-screen grid grid-cols-10 bg-white">
-				<div className=" relative col-span-4 lg:col-span-3 h-full mr-10">
+			<div className="w-screen h-screen mobile:max-sm:flex-row sm:grid sm:grid-cols-10 bg-white">
+				<div className=" relative col-span-4 lg:col-span-3 h-full mr-10 ">
 					<div className="  mx-8 my-12 mt-5 flex justify-between items-start">
 						<div className=" flex flex-col items-start gap-5 ">
 							{photo ? (
