@@ -22,6 +22,9 @@ const config: Config = {
 				hovered: "#388087",
 			},
 		},
+		screens: {
+			'mobile': '320px',
+		}
 	},
 	plugins: [nextui()],
 };
