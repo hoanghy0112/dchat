@@ -13,7 +13,7 @@ export default function CommentItem({
 	const user = useCollectionItem<IUser>([DB_KEYS.USERS, uid]);
 
 	return (
-		<div className=" flex">
+		<div className=" flex p-4 relative">
 			{user ? (
 				<>
 					<Image
@@ -23,12 +23,12 @@ export default function CommentItem({
 						height={50}
 						alt={""}
 					/>
-					<div>
-						<div className=" flex gap-5">
+					<div className=" mx-3 bg-slate-300 rounded-md">
+						<div className=" mx-3 flex gap-5 justify-center items-center">
 							<p className=" font-semibold">{user?.displayName}</p>
-							<p>{date}</p>
+							<p className=" text-sm">{date.slice(0, 10)}<span>:{date.slice(11, 16)}</span></p>
 						</div>
-						<p>{content}</p>
+						<p className=" mx-3">{content}</p>
 					</div>
 				</>
 			) : null}

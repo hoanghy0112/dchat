@@ -5,6 +5,7 @@ import COLLECTIONS from "@/constants/collection";
 import { COOKIES } from "@/constants/cookies";
 import { addCollectionData } from "@/hooks/useData";
 import IFeed from "@/types/IFeed";
+import { Input } from "@nextui-org/react";
 import { getCookie } from "cookies-next";
 import { redirect } from "next/navigation";
 import { FormEventHandler, useCallback, useRef } from "react";
@@ -44,9 +45,9 @@ export default function Page() {
 
 	return (
 		<div>
-			<form onSubmit={onSubmit}>
-				<input ref={contentRef} type="text" />
-				<button type="button">Submit</button>
+			<form className=" flex px-4 py-3 w-full justify-center" onSubmit={onSubmit}>
+				<Input label="How do you feel today!!!" size="xs" className=" w-3/4 bg-white rounded-xl" ref={contentRef} type="text" />
+				<button className=" bg-[#7DD3FC] mx-3 px-2 rounded-xl" type="submit">Post</button>
 			</form>
 			<FeedList />
 		</div>
