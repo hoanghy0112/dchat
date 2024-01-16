@@ -9,9 +9,9 @@ export default function Layout({ children }: { children: ReactNode }) {
 	if (!uid) redirect("/signin");
 
 	return (
-		<>
+		<div className=" w-screen h-screen bg-slate-50">
 			<Toaster position="top-center" reverseOrder={false} />
 			{children}
-		</>
+		</div>
 	);
 }
