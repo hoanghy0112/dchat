@@ -10,6 +10,10 @@ import CommentItem from "./CommentItem";
 import { FormEventHandler, useCallback, useRef } from "react";
 import { getCookie } from "cookies-next";
 import { COOKIES } from "@/constants/cookies";
+import { BiSolidLike } from "react-icons/bi";
+import { FaCommentAlt } from "react-icons/fa"
+import Button from "./Button";
+import {Input} from "@nextui-org/react";
 
 export default function FeedItem({
 	info: { date, content, isVisible, uid },
@@ -76,9 +80,9 @@ export default function FeedItem({
 	);
 
 	return (
-		<div>
+		<div className=" w-1/2 flex-row self-center bg-white rounded-2xl justify-center items-center mt-4 shadow-black shadow-large">
 			{user ? (
-				<div className=" flex gap-3">
+				<div className=" flex gap-3 p-4 relative">
 					<Image
 						className=" rounded-full"
 						src={user.photo || ""}
@@ -87,26 +91,34 @@ export default function FeedItem({
 						alt={""}
 					/>
 					<div>
-						<p>{user.displayName}</p>
-						<p>{date}</p>
+						<p className=" font-medium">{user.displayName}</p>
+						<p className=" text-sm text-gray-600">{date.slice(0, 10)}<span>:{date.slice(11, 16)}</span></p>
 					</div>
 				</div>
 			) : null}
-			<p>{content}</p>
-			<div className=" flex justify-between">
-				<button className=" bg-red-500" onClick={addLike}>
-					Like post
-				</button>
-				<p>{likes.length} likes</p>
-				<div>
-					<form onSubmit={onSubmit}>
-						<input ref={commentRef} type="text" />
-						<button type="button">Submit</button>
-					</form>
-					{comments.map((comment) => (
-						<CommentItem key={comment.date} info={comment} />
-					))}
+			<div className=" my-3 mx-4">
+				<p>{content}</p>
+			</div>
+			<div className=" flex justify-between border-t-1 border-gray-600">
+				<div className=" flex  m-3 items-center">
+					<Button name="like" className=" text-black" onClick={addLike}>
+						<BiSolidLike />
+					</Button>
+					<p className=" mx-2 text-gray-600">{likes.length} likes</p>
 				</div>
+				<div className=" flex items-center justify-center mx-5">
+					<FaCommentAlt />
+					<p className=" ml-3">Comments</p>
+				</div>
+			</div>
+			<div className=" border-t-1 border-gray-600">
+				{comments.map((comment) => (
+					<CommentItem key={comment.date} info={comment} />
+				))}
+				<form className=" flex mx-4 my-3 w-full justify-center" onSubmit={onSubmit}>
+					<Input size="xs" className=" w-3/4 border border-gray-600 rounded-xl" ref={commentRef} type="text" />
+					<button className=" bg-[#7DD3FC] mx-3 px-2 rounded-xl" type="submit">Comment</button>
+				</form>
 			</div>
 		</div>
 	);
