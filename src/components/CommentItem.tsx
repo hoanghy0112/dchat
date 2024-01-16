@@ -17,19 +17,19 @@ export default function CommentItem({
 			{user ? (
 				<>
 					<Image
-						className=" rounded-full relative mobile:w-12 mobile:h-12"
+						className=" rounded-full relative mobile:max-sm:w-12 mobile:max-sm:h-12"
 						src={user.photo || ""}
 						width={50}
 						height={50}
 						alt={""}
 					/>
-					<div className=" mx-3 mobile:mx-2 bg-slate-300 rounded-md mobile:w-3/4">
-						<div className=" mx-3 flex gap-5 mobile:gap-0 items-center">
-							<p className=" font-semibold mobile:text-sm">{user?.displayName}</p>
-							<p className=" text-sm mobile:text-xs">{date.slice(0, 10)}<span> {date.slice(11, 16)}</span></p>
+					<div className=" mx-3 mobile:mx-2 bg-slate-300 rounded-md mobile:max-sm:w-3/4">
+						<div className=" mx-3 flex gap-5 mobile:max-sm:gap-0 items-center">
+							<p className=" font-semibold mobile:max-sm:text-sm">{user?.displayName}</p>
+							<p className=" text-sm mobile:max-sm:text-xs">{date.slice(0, 10)}<span> {date.slice(11, 16)}</span></p>
 						</div>
-						<div className=" mx-3 flex flex-wrap-reverse whitespace-break-spaces mobile:w-max-3/4">
-							<p className=" text-wrap mobile:text-sm mobile:max-w-full">{content}</p>
+						<div className=" mx-3 flex flex-wrap-reverse whitespace-break-spaces mobile:max-sm:w-max-3/4">
+							<p className=" text-wrap mobile:max-sm:text-sm mobile:max-sm:max-w-full">{content}</p>
 						</div>
 					</div>
 				</>

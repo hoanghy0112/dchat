@@ -80,7 +80,7 @@ export default function FeedItem({
 	);
 
 	return (
-		<div className=" lg:w-1/2 md:w-3/4 min-[425px]:w-[90%] mx-[2px] mobile:mt-2 mobile:w-[300px] flex-row self-center bg-white rounded-2xl justify-center items-center mt-4 md:mt-2 shadow-black shadow-large">
+		<div className=" w-1/2 mx-[2px] mobile:max-sm:mt-2 mobile:max-sm:w-[300px] flex-row self-center bg-white rounded-2xl justify-center items-center mt-4 md:mt-2 shadow-black shadow-large">
 			{user ? (
 				<div className=" flex gap-3 p-4 relative">
 					<Image
@@ -115,9 +115,9 @@ export default function FeedItem({
 				{comments.map((comment) => (
 					<CommentItem key={comment.date} info={comment} />
 				))}
-				<form className=" flex mx-4 my-3 w-full mobile:mx-2 justify-center min-[425px]:mx-1" onSubmit={onSubmit}>
-					<Input size="xs" className=" w-3/4 mobile:w-2/3 border border-gray-600 rounded-xl min-[425px]:w-2/3" ref={commentRef} type="text" />
-					<button className=" bg-[#7DD3FC] mobile:w-1/4 mobile:mx-2 mx-3 px-2 rounded-xl mobile:text-xs" type="submit">Comment</button>
+				<form className=" flex mx-4 my-3 w-full mobile:max-sm:mx-2 justify-center" onSubmit={onSubmit}>
+					<Input size="xs" className=" w-3/4 mobile:max-sm:w-2/3 border border-gray-600 rounded-xl min-[425px]:w-2/3" ref={commentRef} type="text" />
+					<button className=" bg-[#7DD3FC] mobile:max-sm:w-1/4 mobile:max-sm:mx-2 mx-3 px-2 rounded-xl mobile:max-sm:text-xs" type="submit">Comment</button>
 				</form>
 			</div>
 		</div>
