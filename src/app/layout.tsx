@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { ReactNode } from "react";
 
 import "./globals.css";
+import Authentication from "@/components/Authentication";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +19,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 			<head>
 				<link rel="manifest" href="/manifest.json" />
 			</head>
-			<body className={`${inter.className} bg-slate-200`}>{children}</body>
+			<body className={`${inter.className} bg-slate-200`}>
+				{children}
+				<Authentication />
+			</body>
 		</html>
 	);
 }

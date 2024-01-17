@@ -10,7 +10,7 @@ import {
 import app from "./index";
 
 const provider = new GoogleAuthProvider();
-const auth = getAuth(app);
+export const auth = getAuth(app);
 
 export const signInWithGoogle = async () => {
 	signInWithRedirect(auth, provider);
