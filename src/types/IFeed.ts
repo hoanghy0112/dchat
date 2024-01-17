@@ -1,22 +1,25 @@
+export type FeedType = "poll" | "feed" | undefined;
+
 export default interface IFeed {
 	date: string;
 	content: string;
-	type?: "poll";
-	// images?: string;
+	type?: FeedType;
 	isVisible: boolean;
 	uid: string;
 }
 
 export interface IPoll {
+	type?: FeedType;
 	uid: string;
 	question: string;
 	date: string;
+	choices: string;
 }
 
-export interface IAnswer {
+export interface IVote {
 	uid: string;
 	date: string;
-	choice: string;
+	choices: string;
 }
 
 export interface IFeedPhoto {

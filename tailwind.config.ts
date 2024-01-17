@@ -14,7 +14,7 @@ const config: Config = {
 					"conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
 			},
 			colors: {
-				primary: "#00F4F2",
+				primary: "#0ea5e9",
 				secondary: "#FF2A54",
 				"background-50": "#F6F6F2",
 				"background-100": "#333333",
@@ -23,12 +23,12 @@ const config: Config = {
 			},
 		},
 		screens: {
-			'mobile': '320px',
-			'mobile2' : '425px',
-			'sm': '640px',
-			'md': '1024px',
-			'lg': '1280px',
-		}
+			mobile: "320px",
+			mobile2: "425px",
+			sm: "640px",
+			md: "1024px",
+			lg: "1280px",
+		},
 	},
 	plugins: [nextui()],
 };

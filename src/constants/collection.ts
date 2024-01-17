@@ -9,6 +9,7 @@ const COLLECTIONS = {
 	BIO: "bio",
 	PHOTOS: "PHOTOS",
 	MESSAGE_USERS: "message-users",
+	POLLS: "polls",
 	CHOICES: "choices",
 	VOTES: "votes",
 };

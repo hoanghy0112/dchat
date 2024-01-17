@@ -5,8 +5,15 @@ import { useCallback, useRef, useState } from "react";
 import { FcDataSheet, FcBullish, FcComboChart } from "react-icons/fc";
 import { GoPlus } from "react-icons/go";
 import { Transition } from "@headlessui/react";
+import { IPoll } from "@/types/IFeed";
+import { getCookie } from "cookies-next";
+import { COOKIES } from "@/constants/cookies";
+import { addCollectionData } from "@/hooks/useData";
+import COLLECTIONS from "@/constants/collection";
 
 export default function PollCreating() {
+	const uid = getCookie(COOKIES.UID) || "";
+
 	const [isOpen, setIsOpen] = useState(false);
 
 	const questionRef = useRef<HTMLInputElement>(null);
@@ -16,7 +23,20 @@ export default function PollCreating() {
 		"Second choice",
 	]);
 
-	const onSubmit = useCallback(() => {}, []);
+	const onSubmit = useCallback(() => {
+		if (!questionRef.current?.value) return;
+
+		const poll: IPoll = {
+			question: questionRef.current.value,
+			uid,
+			date: new Date().toISOString(),
+			choices: choices.filter((v) => v != "").join("_"),
+		};
+
+		setIsOpen(false);
+
+		addCollectionData([COLLECTIONS.POLLS])(poll);
+	}, [questionRef]);
 
 	return (
 		<div>
@@ -60,16 +80,19 @@ export default function PollCreating() {
 						Enter you poll question below
 					</p>
 					<input
+						ref={questionRef}
 						placeholder="What do you want to ask?"
 						className=" text-center mx-20 w-fit min-w-[100px] text-xl outline-none border-b-2 border-slate-400"
 					/>
-					<div className=" mt-5 flex flex-col gap-2">
+					<div className=" mt-8 flex flex-col gap-2">
 						<Button
 							size="sm"
 							className=" bg-purple-100"
 							color={"secondary"}
 							variant={"flat"}
-							onClick={onSubmit}
+							onClick={() => {
+								setChoices((prev) => ["", ...prev]);
+							}}
 						>
 							<p className=" flex text-sm items-center gap-2 text-purple-800 font-semibold">
 								<GoPlus size={20} />

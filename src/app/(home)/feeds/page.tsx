@@ -26,6 +26,7 @@ import { IoTrashOutline } from "react-icons/io5";
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import RecentPollStatistic from "@/components/RecentPollStatistic";
 
 export default function Page() {
 	const router = useRouter();
@@ -110,10 +111,14 @@ export default function Page() {
 					Hello,
 					<br /> {displayName}
 				</h1>
-				<Button onClick={() => {
-					deleteCookie(COOKIES.UID)
-					router.push('/signin')
-				}} className=" h-fit" btnType={"secondary"}>
+				<Button
+					onClick={() => {
+						deleteCookie(COOKIES.UID);
+						router.push("/signin");
+					}}
+					className=" h-fit"
+					btnType={"secondary"}
+				>
 					<VscSignOut size={18} />
 				</Button>
 			</div>
@@ -202,6 +207,7 @@ export default function Page() {
 					</div>
 				)}
 			</form>
+			<RecentPollStatistic />
 			<FeedList />
 			<input
 				onChange={onFileChange}
