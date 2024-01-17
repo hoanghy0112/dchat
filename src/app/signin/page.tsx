@@ -25,6 +25,7 @@ export default function Page() {
 		e.preventDefault();
 
 		const googleUser = await signInWithGoogle();
+		console.log({ googleUser });
 		const uid = googleUser.profile.uid;
 		const displayName = googleUser.profile.displayName;
 		const email = googleUser.profile.email;
