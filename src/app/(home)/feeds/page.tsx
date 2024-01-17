@@ -28,6 +28,7 @@ import Image from "next/image";
 export default function Page() {
 	const uid = getCookie(COOKIES.UID);
 	const displayName = getCookie(COOKIES.DISPLAY_NAME);
+	const photo = getCookie(COOKIES.PHOTO);
 
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -103,17 +104,26 @@ export default function Page() {
 				className=" flex flex-col gap-3 px-3 w-full justify-center"
 				onSubmit={onSubmit}
 			>
-				<Textarea
-					placeholder="How do you feel today!!!"
-					//@ts-ignore
-					size="xs"
-					rows={isOpen ? 4 : 2}
-					className=" px-3 py-3 w-full bg-white rounded-xl"
-					ref={contentRef}
-					onFocus={() => setIsOpen(true)}
-					// onBlur={() => setIsOpen(false)}
-					type="text"
-				/>
+				<div className=" flex gap-3">
+					<Image
+						className=" mt-2 h-fit rounded-full"
+						src={photo || ""}
+						width={30}
+						height={30}
+						alt={""}
+					/>
+					<Textarea
+						placeholder="How do you feel today!!!"
+						//@ts-ignore
+						size="xs"
+						rows={isOpen ? 4 : 2}
+						className=" px-3 py-3 w-full bg-white rounded-xl"
+						ref={contentRef}
+						onFocus={() => setIsOpen(true)}
+						// onBlur={() => setIsOpen(false)}
+						type="text"
+					/>
+				</div>
 				{files?.length && isOpen ? (
 					<div className=" p-2 bg-slate-200 rounded-lg grid grid-cols-4 gap-3">
 						{Array(files?.length)
