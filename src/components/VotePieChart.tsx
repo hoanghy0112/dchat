@@ -56,13 +56,15 @@ export default function VotePieChart({
 	};
 
 	const data = {
-		choices,
+		labels: choices,
 		datasets: [
 			{
 				label: "Number",
 				data: choices.map(
 					(choice, index) =>
-						votes.filter((vote) => vote.choices.split("_")[index]).length
+						votes.filter(
+							(vote) => vote.choices.split("_")[index] == "true"
+						).length
 				),
 				borderColor: "#FFCB1B",
 				backgroundColor: ["#3CAEF4", "#BBE1FC", "#42E68E", "#C7B8FF"],
@@ -72,9 +74,11 @@ export default function VotePieChart({
 		],
 	};
 
+	console.log({ data });
+
 	return (
 		<div className=" w-fit relative mt-0 px-0 sm:px-8 my-5">
-			<div className=" absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[70%]">
+			<div className=" absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[90%]">
 				<p className=" text-secondary-950 font-semibold text-3xl text-center">
 					{votes.length}
 				</p>
