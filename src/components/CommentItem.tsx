@@ -14,7 +14,7 @@ export default function CommentItem({
 	const user = useCollectionItem<IUser>([DB_KEYS.USERS, uid]);
 
 	return (
-		<div className=" flex p-4 relative">
+		<div className=" flex p-2 relative">
 			{user ? (
 				<>
 					<Image

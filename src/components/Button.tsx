@@ -54,8 +54,9 @@ const getTheme = (isFill: boolean): CustomFlowbiteTheme["button"] => {
 					"bg-sky-300 hover:bg-sky-400 focus:ring-sky-100 text-white",
 				secondary:
 					"bg-white hover:bg-gray-50 focus:ring-gray-100 text-gray-900",
-				error: "bg-color-error hover:bg-red-600 focus:ring-red-100 text-white",
+				error: "bg-red-500 hover:bg-red-600 focus:ring-red-100 text-white",
 			},
+			size: {}
 		};
 	return {
 		color: {

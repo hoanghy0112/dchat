@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 export default function ImageStorage({ src }: { src: string }) {
 	const [url, setUrl] = useState<string>();
+	const [isSeleted, setIsSelected] = useState<boolean>(false);
 
 	useEffect(() => {
 		getDownloadURL(ref(storage, src))
@@ -33,7 +34,31 @@ export default function ImageStorage({ src }: { src: string }) {
 
 	return url ? (
 		<>
-			<Image src={url} layout="fill" objectFit="cover" alt="image" />
+			<Image
+				onClick={() => setIsSelected(true)}
+				className=" rounded-lg cursor-pointer"
+				src={url}
+				layout="fill"
+				objectFit="cover"
+				alt="image"
+			/>
+			{isSeleted && (
+				<>
+					<div
+						className=" fixed bg-gray-800 opacity-50 w-screen h-screen top-0 left-0 z-10"
+						onClick={() => setIsSelected(false)}
+					/>
+					<div className="  z-20 w-5/6 h-[300px] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+						<Image
+							src={url}
+							className=" rounded-2xl w-full"
+							layout="fill"
+							objectFit="cover"
+							alt="image"
+						/>
+					</div>
+				</>
+			)}
 		</>
 	) : null;
 }

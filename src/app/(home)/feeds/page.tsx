@@ -2,34 +2,69 @@
 
 import Button from "@/components/Button";
 import FeedList from "@/components/FeedList";
+import ImageStorage from "@/components/ImageStorage";
+import SquareDiv from "@/components/SquareDiv";
 import COLLECTIONS from "@/constants/collection";
 import { COOKIES } from "@/constants/cookies";
 import { addCollectionData } from "@/hooks/useData";
+import { storage } from "@/services/firebase";
 import IFeed from "@/types/IFeed";
 import { getCookie } from "cookies-next";
+import { ref, uploadBytes } from "firebase/storage";
 import { Textarea } from "flowbite-react";
-import { FormEventHandler, useCallback, useRef, useState } from "react";
+import {
+	ChangeEventHandler,
+	FormEventHandler,
+	useCallback,
+	useRef,
+	useState,
+} from "react";
+import { FaImages } from "react-icons/fa6";
+import { FcFullTrash } from "react-icons/fc";
+import { IoTrashOutline } from "react-icons/io5";
+
+import Image from "next/image";
 
 export default function Page() {
 	const uid = getCookie(COOKIES.UID);
+	const displayName = getCookie(COOKIES.DISPLAY_NAME);
 
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 
 	const contentRef = useRef<HTMLTextAreaElement>(null);
+	const fileRef = useRef<HTMLInputElement>(null);
+
+	const [files, setFiles] = useState<FileList>();
 
 	const addToFeed = useCallback(
 		(text: string) => {
 			if (!uid) return;
 
+			const date = new Date().toISOString();
 			const value: IFeed = {
-				date: new Date().toISOString(),
+				date,
 				content: text,
 				isVisible: true,
 				uid: uid?.toString(),
 			};
 			addCollectionData([COLLECTIONS.FEED])(value);
+
+			if (!files) return;
+			for (let i = 0; i < files.length; i++) {
+				const file = files.item(i);
+				if (file == null) return;
+				const url = `photo-${uid}-${new Date().toISOString()}-${file.name}`;
+				const storageRef = ref(storage, url);
+				uploadBytes(storageRef, file).then((snapshot) => {
+					addCollectionData([COLLECTIONS.FEED, date, COLLECTIONS.PHOTOS])({
+						date: new Date().toISOString(),
+						url,
+						uid,
+					});
+				});
+			}
 		},
-		[uid]
+		[uid, files]
 	);
 
 	const onSubmit = useCallback<FormEventHandler<HTMLFormElement>>(
@@ -42,44 +77,108 @@ export default function Page() {
 			}
 			addToFeed(value);
 			setIsOpen(false);
+			setFiles(undefined);
 
 			contentRef.current.value = "";
 		},
 		[addToFeed]
 	);
 
+	const onFileChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
+		(e) => {
+			const files = e.target.files;
+			if (!files || !files?.length) return;
+			setFiles(files);
+		},
+		[]
+	);
+
 	return (
 		<div className=" pt-5 flex flex-col overflow-x-hidden gap-5 w-full">
+			<h1 className=" font-bold text-xl px-4">
+				Hello,
+				<br /> {displayName}
+			</h1>
 			<form
-				className=" flex flex-col gap-3 px-5 w-full justify-center"
+				className=" flex flex-col gap-3 px-3 w-full justify-center"
 				onSubmit={onSubmit}
 			>
 				<Textarea
 					placeholder="How do you feel today!!!"
 					//@ts-ignore
 					size="xs"
-					className=" px-2 py-3 w-full bg-white rounded-xl"
+					rows={isOpen ? 4 : 2}
+					className=" px-3 py-3 w-full bg-white rounded-xl"
 					ref={contentRef}
 					onFocus={() => setIsOpen(true)}
+					// onBlur={() => setIsOpen(false)}
 					type="text"
 				/>
+				{files?.length && isOpen ? (
+					<div className=" p-2 bg-slate-200 rounded-lg grid grid-cols-4 gap-3">
+						{Array(files?.length)
+							.fill("")
+							.map((_, i) =>
+								files?.item(i) != null ? (
+									<SquareDiv className=" fixed w-full bg-slate-200 cursor-pointer active:bg-slate-300 duration-200">
+										<Image
+											//@ts-ignore
+											src={URL.createObjectURL(files?.item(i))}
+											layout="fill"
+											objectFit="cover"
+											alt=""
+										/>
+									</SquareDiv>
+								) : null
+							)}
+						<SquareDiv>
+							<Button
+								onClick={() => setFiles(undefined)}
+								className=" w-full h-full"
+								btnType={"error"}
+							>
+								<IoTrashOutline className=" text-white" size={20} />
+							</Button>
+						</SquareDiv>
+					</div>
+				) : null}
+
 				{isOpen && (
 					<div className="flex justify-end gap-3">
-						<div className=" flex-1 flex gap-3"></div>
+						<div className=" flex-1 flex gap-3">
+							<Button
+								btnType={"secondary"}
+								size={"sm"}
+								className=" w-fit "
+								onClick={() => {
+									fileRef.current?.click();
+								}}
+							>
+								<FaImages />
+							</Button>
+						</div>
 						<Button
+							size={"sm"}
 							btnType={"secondary"}
 							className=" w-fit "
 							onClick={() => setIsOpen(false)}
 						>
 							Cancel
 						</Button>
-						<Button className=" w-fit " type="submit">
+						<Button size={"sm"} className=" w-fit " type="submit">
 							Post
 						</Button>
 					</div>
 				)}
 			</form>
 			<FeedList />
+			<input
+				onChange={onFileChange}
+				className="h-0 w-0"
+				ref={fileRef}
+				type="file"
+				multiple
+			/>
 		</div>
 	);
 }
