@@ -1,9 +1,9 @@
 import GUN from "gun/gun";
 
-const db = GUN({ peers: ["http://dchat-api.hoanghy.space/gun"] });
+const db = GUN({ peers: ["https://dchat-api.hoanghy.space/gun"] });
 
 export default function useDB() {
-	const db = GUN({ peers: ["http://dchat-api.hoanghy.space/gun"] });
+	const db = GUN({ peers: ["https://dchat-api.hoanghy.space/gun"] });
 
 	return db;
 }
