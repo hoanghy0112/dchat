@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@andyet/simplewebrtc": "^1.32.0",
+    "@headlessui/react": "^1.7.18",
     "@next/bundle-analyzer": "^14.0.4",
     "@nextui-org/react": "^2.2.9",
     "concurrently": "^8.2.2",

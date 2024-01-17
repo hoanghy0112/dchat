@@ -9,6 +9,8 @@ const COLLECTIONS = {
 	BIO: "bio",
 	PHOTOS: "PHOTOS",
 	MESSAGE_USERS: "message-users",
+	CHOICES: "choices",
+	VOTES: "votes",
 };
 
 export default COLLECTIONS;
