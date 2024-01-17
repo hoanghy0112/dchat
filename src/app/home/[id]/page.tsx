@@ -174,8 +174,8 @@ export default function Page({
 								/>
 							)}
 							<div className=" flex flex-col">
-								<p className=" font-medium">{user.displayName}</p>
-								<p className=" text-zinc-700">{user.email}</p>
+								<p className=" mobile:max-sm:text-sm font-medium">{user.displayName}</p>
+								<p className=" mobile:max-sm:text-xs text-zinc-700">{user.email}</p>
 							</div>
 						</div>
 						<div className=" h-fit pr-4">
@@ -185,7 +185,7 @@ export default function Page({
 							/>
 						</div>
 					</div>
-					<div className=" w-full mt-5 pr-3 flex-1 overflow-auto">
+					<div className=" w-full border-t-1 border-gray-500 mt-5 pr-3 flex-1 overflow-auto">
 						{messages.map((data: IMessage, index: number) => (
 							<div
 								key={index}
@@ -224,7 +224,7 @@ export default function Page({
 							</div>
 						</div>
 					) : null}
-					<div className=" flex gap-5 px-3 w-full pt-4 pb-2">
+					<div className=" flex gap-5 mobile:max-sm:px-1 px-3 w-full pt-4 pb-2">
 						<Input
 							value={content}
 							onChange={(e) => setContent(e.target.value)}
