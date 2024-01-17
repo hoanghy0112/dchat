@@ -2,7 +2,6 @@ import { storage } from "@/services/firebase";
 import { getDownloadURL, getMetadata, ref } from "firebase/storage";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import Video from "next-video";
 
 export default function ImageStorage({ src }: { src: string }) {
 	const [url, setUrl] = useState<string>();
@@ -40,7 +39,7 @@ export default function ImageStorage({ src }: { src: string }) {
 	return url && type ? (
 		<>
 			{type == "video" ? (
-				<video  autoPlay loop>
+				<video autoPlay loop>
 					<source src={url} type="video/mp4" />
 				</video>
 			) : (

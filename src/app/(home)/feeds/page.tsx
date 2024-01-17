@@ -9,7 +9,7 @@ import { COOKIES } from "@/constants/cookies";
 import { addCollectionData } from "@/hooks/useData";
 import { storage } from "@/services/firebase";
 import IFeed from "@/types/IFeed";
-import { getCookie } from "cookies-next";
+import { deleteCookie, getCookie } from "cookies-next";
 import { ref, uploadBytes } from "firebase/storage";
 import { Textarea } from "flowbite-react";
 import {
@@ -21,6 +21,7 @@ import {
 } from "react";
 import { FaImages } from "react-icons/fa6";
 import { FcFullTrash } from "react-icons/fc";
+import { VscSignOut } from "react-icons/vsc";
 import { IoTrashOutline } from "react-icons/io5";
 
 import Image from "next/image";
@@ -104,11 +105,17 @@ export default function Page() {
 
 	return (
 		<div className=" pt-5 flex flex-col overflow-x-hidden gap-5 w-full">
-			<div className=" flex justify-between">
+			<div className=" pr-3 flex justify-between">
 				<h1 className=" font-bold text-2xl px-4">
 					Hello,
 					<br /> {displayName}
 				</h1>
+				<Button onClick={() => {
+					deleteCookie(COOKIES.UID)
+					router.push('/signin')
+				}} className=" h-fit" btnType={"secondary"}>
+					<VscSignOut size={18} />
+				</Button>
 			</div>
 			<form
 				className=" flex flex-col gap-3 px-3 w-full justify-center"
