@@ -139,11 +139,15 @@ export default function FeedItem({
 					</SquareDiv>
 				))}
 			</div> */}
-			<Carousel className=" bg-white" slide={false} slideInterval={1000}>
+			<Carousel
+				className=" p-3 bg-white"
+				slide={false}
+				slideInterval={1000}
+			>
 				{photos.map(({ url }, index) => (
 					<SquareDiv
 						key={url}
-						className={` w-full bg-slate-200 cursor-pointer active:bg-slate-300 duration-200`}
+						className={` w-full bg-slate-200 cursor-pointer duration-200`}
 					>
 						<ImageStorage src={url} />
 					</SquareDiv>
