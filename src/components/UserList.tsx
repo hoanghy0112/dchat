@@ -19,6 +19,9 @@ import { useEffect, useState } from "react";
 import { HiOutlinePlus, HiSearch } from "react-icons/hi";
 import { useDebounce } from "react-use";
 import Image from "next/image";
+import { useCollectionList } from "@/hooks/useData";
+import COLLECTIONS from "@/constants/collection";
+import ChatUser from "./ChatUser";
 
 function UserList({
 	className,
@@ -27,38 +30,28 @@ function UserList({
 	const router = useRouter();
 	const db = getDB();
 
-	const uid = getCookie(COOKIES.UID);
+	const uid = getCookie(COOKIES.UID) || "";
 
 	const [isOpen, setIsOpen] = useState(false);
 	const [keyword, setKeyword] = useState("");
 
-	const [userList, setUserList] = useState<IUser[]>([]);
-
-	const fetchData = () => {
-		const list: IUser[] = [];
-
-		db.get(DB_KEYS.USERS)
-			.map()
-			.once((data: IUser) => {
-				if (data.uid != uid) {
-					list.push(data);
-					setUserList(list);
-				}
-			});
-	};
+	const { data: userList } = useCollectionList<IUser>([
+		COLLECTIONS.USERS,
+		uid,
+		COLLECTIONS.FRIENDS,
+	]);
 
 	const handleChoose = (uid: string) => () => {
 		setIsOpen(false);
-		router.replace(`/home/${uid}`);
+		router.replace(`/messages/${uid}`);
 	};
 
-	useEffect(() => {
-		fetchData();
-	}, []);
-
 	return (
-		<>
-			{userList.map(({ uid, displayName, photo }) => (
+		<div className={className}>
+			{userList.map((user) => (
+				<ChatUser uid={user.uid} />
+			))}
+			{/* {userList.map(({ uid, displayName, photo }) => (
 				<div
 					className=" h-full flex justify-between px-2 py-3 rounded-md hover:bg-slate-400 active:bg-slate-200 transition-all duration-200 cursor-pointer"
 					key={uid}
@@ -73,8 +66,8 @@ function UserList({
 					/>
 					<p className=" font-semibold">{displayName}</p>
 				</div>
-			))}
-		</>
+			))} */}
+		</div>
 	);
 }
 

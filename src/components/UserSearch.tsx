@@ -5,7 +5,6 @@ import { DB_KEYS } from "@/constants/dbKeys";
 import useDB, { getDB } from "@/hooks/useDB";
 import IUser from "@/types/IUser";
 import {
-	Button,
 	Input,
 	Modal,
 	ModalBody,
@@ -17,7 +16,9 @@ import { getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { HiOutlinePlus, HiSearch } from "react-icons/hi";
+import { BsPencilSquare } from "react-icons/bs";
 import { useDebounce } from "react-use";
+import Button from "./Button";
 
 export default function UserSearch({
 	className,
@@ -53,18 +54,13 @@ export default function UserSearch({
 	};
 
 	return (
-		<div
-			className={` w-full flex flex-col items-center ${className}`}
-			{...props}
-		>
+		<div className={` flex flex-col items-center ${className}`} {...props}>
 			<Button
-				color={"success"}
-				className=" font-medium px-5"
-				variant={"flat"}
-				startContent={<HiOutlinePlus size={20} />}
+				btnType={"secondary"}
+				className=" font-medium"
 				onClick={() => setIsOpen(true)}
 			>
-				Add conversation
+				<BsPencilSquare size={20} />
 			</Button>
 			<Modal size={"2xl"} isOpen={isOpen} onClose={() => setIsOpen(false)}>
 				<ModalContent>
@@ -97,14 +93,8 @@ export default function UserSearch({
 								</ul>
 							</ModalBody>
 							<ModalFooter>
-								<Button
-									color="danger"
-									variant="light"
-									onPress={onClose}
-								>
-									Close
-								</Button>
-								<Button color="primary" onPress={onClose}>
+								<Button onClick={onClose}>Close</Button>
+								<Button color="primary" onClick={onClose}>
 									Action
 								</Button>
 							</ModalFooter>

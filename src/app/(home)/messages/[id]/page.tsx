@@ -24,24 +24,20 @@ import {
 } from "firebase/firestore";
 import Image from "next/image";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { FaChevronLeft } from "react-icons/fa6";
 import { HiOutlineChevronRight } from "react-icons/hi";
 import { IoCall } from "react-icons/io5";
 import { LuSendHorizonal } from "react-icons/lu";
 import { MdCallEnd } from "react-icons/md";
 
-import {
-	BrowserView,
-	MobileView,
-	isBrowser,
-	isMobile,
-} from "react-device-detect";
+import { useRouter } from "next/navigation";
 
 export default function Page({
 	params: { id: receiverUID },
 }: {
 	params: { id: string };
 }) {
-
+	const router = useRouter();
 	const db = getDB();
 	const uid = getCookie(COOKIES.UID) as string;
 
@@ -159,33 +155,44 @@ export default function Page({
 	}
 
 	return (
-		<div className=" h-full flex flex-col overflow-auto">
+		<div className=" flex-1 h-full flex flex-col overflow-auto">
 			{user ? (
 				<>
-					<div className=" w-full flex justify-between">
-						<div className=" flex gap-3 items-center">
-							{user.photo && (
-								<Image
-									className=" rounded-full"
-									src={user.photo}
-									width={50}
-									height={50}
-									alt={""}
-								/>
-							)}
-							<div className=" flex flex-col">
-								<p className=" mobile:max-sm:text-sm font-medium">{user.displayName}</p>
-								<p className=" mobile:max-sm:text-xs text-zinc-700">{user.email}</p>
+					<div className=" w-full px-5 py-2 flex justify-between shadow-lg">
+						<div className=" flex gap-2 items-center">
+							<FaChevronLeft
+								onClick={() => router.push("/messages")}
+								className="p-2 -ml-3 -mr-3 rounded-full active:bg-slate-200 duration-200"
+								size={33}
+							/>
+							<div
+								onClick={() => router.push(`/users/${receiverUID}`)}
+								className=" flex gap-2 py-2 px-3 items-center rounded-lg active:bg-slate-200 duration-200"
+							>
+								{user.photo && (
+									<Image
+										className=" rounded-full"
+										src={user.photo}
+										width={30}
+										height={30}
+										alt={""}
+									/>
+								)}
+								<div className=" flex flex-col">
+									<p className=" text-sm font-semibold">
+										{user.displayName}
+									</p>
+								</div>
 							</div>
 						</div>
-						<div className=" h-fit pr-4">
+						<div className=" h-fit pr-0">
 							<CallVideo
 								roomTitle={roomTitle}
 								receiverId={receiverUID}
 							/>
 						</div>
 					</div>
-					<div className=" w-full border-t-1 border-gray-500 mt-5 pr-3 flex-1 overflow-auto">
+					<div className=" w-full border-t-1 mt-0 pt-3 pr-3 flex-1 overflow-auto">
 						{messages.map((data: IMessage, index: number) => (
 							<div
 								key={index}
@@ -195,7 +202,7 @@ export default function Page({
 										: " justify-start pr-20"
 								}`}
 							>
-								<p className=" w-fit bg-slate-300 px-3 py-2 rounded-xl hover:bg-slate-200 duration-200 cursor-pointer">
+								<p className=" text-sm w-fit bg-slate-300 px-3 py-2 rounded-xl hover:bg-slate-200 duration-200 cursor-pointer">
 									{data.content || "No content"}
 								</p>
 							</div>
