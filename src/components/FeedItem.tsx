@@ -115,7 +115,7 @@ export default function FeedItem({
 						alt={""}
 					/>
 					<div>
-						<p className=" font-medium text-sm">{user.displayName}</p>
+						<p className=" font-semibold text-sm">{user.displayName}</p>
 						<p className=" text-xs text-gray-600">
 							{moment(new Date(date || new Date())).fromNow()}
 						</p>
@@ -123,7 +123,7 @@ export default function FeedItem({
 				</div>
 			) : null}
 			<div className=" bg-white my-1 mb-3 mx-5">
-				<p>{content}</p>
+				<p className=" text-sm font-medium">{content}</p>
 			</div>
 			{/* <div className=" grid grid-cols-2">
 				{photos.map(({ url }, index) => (
@@ -139,11 +139,7 @@ export default function FeedItem({
 					</SquareDiv>
 				))}
 			</div> */}
-			<Carousel
-				className=" p-3 bg-white"
-				slide={false}
-				slideInterval={1000}
-			>
+			<Carousel className=" p-3 bg-white" slide={false} slideInterval={1000}>
 				{photos.map(({ url }, index) => (
 					<SquareDiv
 						key={url}

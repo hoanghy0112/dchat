@@ -95,7 +95,7 @@ export default function Page() {
 
 	return (
 		<div className=" pt-5 flex flex-col overflow-x-hidden gap-5 w-full">
-			<h1 className=" font-bold text-xl px-4">
+			<h1 className=" font-bold text-2xl px-4">
 				Hello,
 				<br /> {displayName}
 			</h1>
