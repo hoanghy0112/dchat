@@ -2,6 +2,7 @@ import { DB_KEYS } from "@/constants/dbKeys";
 import { useCollectionItem, useItem } from "@/hooks/useData";
 import { IComment } from "@/types/IFeed";
 import IUser from "@/types/IUser";
+import moment from "moment";
 
 import Image from "next/image";
 
@@ -17,20 +18,28 @@ export default function CommentItem({
 			{user ? (
 				<>
 					<Image
-						className=" rounded-full relative mobile:max-sm:w-12 mobile:max-sm:h-12"
+						className=" rounded-full relative h-fit"
 						src={user.photo || ""}
-						width={50}
-						height={50}
+						width={30}
+						height={30}
 						alt={""}
 					/>
-					<div className=" mx-3 mobile:mx-2 bg-slate-300 rounded-md mobile:max-sm:w-3/4">
-						<div className=" mx-3 flex gap-5 mobile:max-sm:gap-0 items-center">
-							<p className=" font-semibold mobile:max-sm:text-sm">{user?.displayName}</p>
-							<p className=" text-sm mobile:max-sm:text-xs">{date.slice(0, 10)}<span> {date.slice(11, 16)}</span></p>
+					<div className=" w-full px-2">
+						<div className=" w-fit px-3 pr-5 py-1 bg-slate-200 rounded-md">
+							<div className=" mb-1 flex flex-col gap-2 mobile:max-sm:gap-0 items-start">
+								<p className=" font-semibold text-sm">
+									{user?.displayName}
+								</p>
+							</div>
+							<div className=" flex flex-wrap-reverse whitespace-break-spaces mobile:max-sm:w-max-3/4">
+								<p className=" break-words whitespace-break-spaces text-wrap mobile:max-sm:text-sm mobile:max-sm:max-w-full">
+									{content}
+								</p>
+							</div>
 						</div>
-						<div className=" mx-3 flex flex-wrap-reverse whitespace-break-spaces mobile:max-sm:w-max-3/4">
-							<p className=" break-words whitespace-break-spaces text-wrap mobile:max-sm:text-sm mobile:max-sm:max-w-full">{content}</p>
-						</div>
+						<p className=" ml-1 mt-1 text-sm mobile:max-sm:text-xs">
+							{moment(new Date(user.date || new Date())).fromNow()}
+						</p>
 					</div>
 				</>
 			) : null}

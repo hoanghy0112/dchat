@@ -12,8 +12,9 @@ import { getCookie } from "cookies-next";
 import { COOKIES } from "@/constants/cookies";
 import { BiSolidLike } from "react-icons/bi";
 import { FaCommentAlt } from "react-icons/fa";
-import Button from "./Button";
-import { Input } from "@nextui-org/react";
+import { LuSendHorizonal } from "react-icons/lu";
+import { Button, Input } from "@nextui-org/react";
+import moment from "moment";
 
 export default function FeedItem({
 	info: { date, content, isVisible, uid },
@@ -56,7 +57,6 @@ export default function FeedItem({
 	const addLike = useCallback(() => {
 		if (!currentUID) return;
 
-		console.log({ likes });
 		if (likes.some(({ uid }) => uid == currentUID)) return;
 
 		const value: ILike = {
@@ -75,68 +75,70 @@ export default function FeedItem({
 				return;
 			}
 			addComment(value);
+			commentRef.current.value = "";
 		},
 		[addComment]
 	);
 
 	return (
-		<div className=" w-1/2 mx-[2px] mobile:max-sm:mt-2 mobile:max-sm:w-[300px] flex-row self-center bg-white rounded-2xl justify-center items-center mt-4 md:mt-2 shadow-black shadow-large">
+		<div className=" w-1/2 mx-[2px] mobile:max-sm:mt-2 mobile:max-sm:w-full flex-row self-center bg-white rounded-none justify-center items-center mt-4 md:mt-2 shadow-black shadow-large">
 			{user ? (
 				<div className=" flex gap-3 p-4 relative">
 					<Image
 						className=" rounded-full"
 						src={user.photo || ""}
-						width={50}
-						height={50}
+						width={40}
+						height={40}
 						alt={""}
 					/>
 					<div>
-						<p className=" font-medium">{user.displayName}</p>
-						<p className=" text-sm text-gray-600">
-							{date.slice(0, 10)}
-							<span>:{date.slice(11, 16)}</span>
+						<p className=" font-medium text-sm">{user.displayName}</p>
+						<p className=" text-xs text-gray-600">
+							{moment(new Date(date || new Date())).fromNow()}
 						</p>
 					</div>
 				</div>
 			) : null}
-			<div className=" my-3 mx-4">
+			<div className=" my-1 mb-3 mx-5">
 				<p>{content}</p>
 			</div>
-			<div className=" flex justify-between border-t-1 border-gray-600">
+			<div className=" flex justify-between border-t-1 border-gray-300">
 				<div className=" flex  m-3 items-center">
 					<Button name="like" className=" text-black" onClick={addLike}>
 						<BiSolidLike />
 					</Button>
 					<p className=" mx-2 text-gray-600">{likes.length} likes</p>
 				</div>
-				<div className=" flex items-center justify-center mx-5">
+				{/* <div className=" flex items-center justify-center mx-5">
 					<FaCommentAlt />
 					<p className=" ml-3">Comments</p>
-				</div>
+				</div> */}
 			</div>
-			<div className=" border-t-1 border-gray-600">
+			<div className=" border-t-1 border-gray-300">
 				{comments.map((comment) => (
 					<CommentItem key={comment.date} info={comment} />
 				))}
 				<form
-					className=" flex mx-4 my-3 w-full mobile:max-sm:mx-2 justify-center"
+					className=" flex items-center gap-3 px-3 my-3 w-full justify-center"
 					onSubmit={onSubmit}
 				>
 					{
 						<Input
 							//@ts-ignore
 							size="xs"
-							className=" w-3/4 mobile:max-sm:w-2/3 border border-gray-600 rounded-xl min-[425px]:w-2/3"
+							className=" flex-1 text-sm border-gray-300 bg-white rounded-xl"
 							ref={commentRef}
 							type="text"
 						/>
 					}
-					<button
-						className=" bg-[#7DD3FC] mobile:max-sm:w-1/4 mobile:max-sm:mx-2 mx-3 px-2 rounded-xl mobile:max-sm:text-xs"
+					<Button
+						isIconOnly
+						className=" w-fit bg-white"
+						size={"sm"}
 						type="submit"
 					>
-						Comment
-					</button>
+						<LuSendHorizonal size={20} />
+					</Button>
 				</form>
 			</div>
 		</div>

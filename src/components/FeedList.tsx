@@ -7,7 +7,7 @@ export default function FeedList() {
 	const { data: feeds } = useCollectionList<IFeed>([COLLECTIONS.FEED]);
 
 	return (
-		<div className=" flex flex-col gap-5">
+		<div className=" flex flex-col gap-2">
 			{feeds.map((value) => (
 				<FeedItem info={value} key={value.date} />
 			))}

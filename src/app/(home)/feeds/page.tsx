@@ -1,18 +1,21 @@
 "use client";
 
+import Button from "@/components/Button";
 import FeedList from "@/components/FeedList";
 import COLLECTIONS from "@/constants/collection";
 import { COOKIES } from "@/constants/cookies";
 import { addCollectionData } from "@/hooks/useData";
 import IFeed from "@/types/IFeed";
-import { Input } from "@nextui-org/react";
 import { getCookie } from "cookies-next";
-import { FormEventHandler, useCallback, useRef } from "react";
+import { Textarea } from "flowbite-react";
+import { FormEventHandler, useCallback, useRef, useState } from "react";
 
 export default function Page() {
 	const uid = getCookie(COOKIES.UID);
 
-	const contentRef = useRef<HTMLInputElement>(null);
+	const [isOpen, setIsOpen] = useState<boolean>(false);
+
+	const contentRef = useRef<HTMLTextAreaElement>(null);
 
 	const addToFeed = useCallback(
 		(text: string) => {
@@ -38,30 +41,43 @@ export default function Page() {
 				return;
 			}
 			addToFeed(value);
+			setIsOpen(false);
+
+			contentRef.current.value = "";
 		},
 		[addToFeed]
 	);
 
 	return (
-		<div>
+		<div className=" pt-5 flex flex-col overflow-x-hidden gap-5 w-full">
 			<form
-				className=" flex px-4 py-3 w-full justify-center"
+				className=" flex flex-col gap-3 px-5 w-full justify-center"
 				onSubmit={onSubmit}
 			>
-				<Input
-					label="How do you feel today!!!"
+				<Textarea
+					placeholder="How do you feel today!!!"
 					//@ts-ignore
 					size="xs"
-					className=" w-3/4 bg-white rounded-xl"
+					className=" px-2 py-3 w-full bg-white rounded-xl"
 					ref={contentRef}
+					onFocus={() => setIsOpen(true)}
 					type="text"
 				/>
-				<button
-					className=" bg-[#7DD3FC] mx-3 px-2 rounded-xl"
-					type="submit"
-				>
-					Post
-				</button>
+				{isOpen && (
+					<div className="flex justify-end gap-3">
+						<div className=" flex-1 flex gap-3"></div>
+						<Button
+							btnType={"secondary"}
+							className=" w-fit "
+							onClick={() => setIsOpen(false)}
+						>
+							Cancel
+						</Button>
+						<Button className=" w-fit " type="submit">
+							Post
+						</Button>
+					</div>
+				)}
 			</form>
 			<FeedList />
 		</div>
