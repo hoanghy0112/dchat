@@ -36,7 +36,7 @@ export default function PollCreating() {
 		setIsOpen(false);
 
 		addCollectionData([COLLECTIONS.POLLS])(poll);
-	}, [questionRef]);
+	}, [questionRef, choices]);
 
 	return (
 		<div>
@@ -110,7 +110,8 @@ export default function PollCreating() {
 									onChange={(e) => {
 										const newChoices = [...choices];
 										newChoices[id] = e.target.value;
-										setChoices(newChoices);
+										console.log(newChoices);
+										setChoices([...newChoices]);
 									}}
 									placeholder="Answer choice"
 									className=" p-1 text-sm outline-none border-b-2  border-slate-400"
