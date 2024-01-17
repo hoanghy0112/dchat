@@ -42,10 +42,10 @@ export function useCollectionList<T>(
 		dbRef.map().on((data) => {
 			setData((prev) => {
 				const newMap = new Map(prev.entries());
-				// if (!data.date) {
-				// 	console.error("Date not found in data");
-				// 	return newMap;
-				// }
+				if (!data[key]) {
+					console.error("Key not found in data");
+					return newMap;
+				}
 				newMap.set(data[key], data);
 				return newMap;
 			});
@@ -55,22 +55,38 @@ export function useCollectionList<T>(
 	return { data: Array.from(data.values()) };
 }
 
-export const addCollectionData = (collections: string[]) => (value: any) => {
-	if (collections.length % 2 != 1) {
-		console.error(
-			"addCollectionData: collections length must be an odd number"
-		);
-		return;
-	}
-	if (!value.date) {
-		console.error("addCollectionData: value does not contain date field");
+export const addCollectionData =
+	(collections: string[]) =>
+	(value: any, key = "date") => {
+		if (collections.length % 2 != 1) {
+			console.error(
+				"addCollectionData: collections length must be an odd number"
+			);
+			return;
+		}
+		if (!value.date) {
+			console.error("addCollectionData: value does not contain date field");
+			return;
+		}
+
+		let dbRef = getDB().get(collections[0]);
+		collections.slice(1).forEach((ref) => (dbRef = dbRef.get(ref)));
+		const date = new Date().toISOString();
+		console.log({ dbRef, value });
+		dbRef.get(value[key]).put({ ...value });
+		return date;
+	};
+
+export const addItemData = (collections: string[]) => (value: any) => {
+	if (collections.length % 2 != 0) {
+		console.error("addItemData: collections length must be an even number");
 		return;
 	}
 
 	let dbRef = getDB().get(collections[0]);
 	collections.slice(1).forEach((ref) => (dbRef = dbRef.get(ref)));
+	dbRef.put(value);
 	const date = new Date().toISOString();
-	dbRef.get(value.date).put({ ...value });
 	return date;
 };
 
@@ -100,7 +116,13 @@ export function useCollectionItem<T>(refList: string[]): T | undefined {
 
 		let dbRef = getDB().get(refList[0]);
 		refList.slice(1).forEach((ref) => (dbRef = dbRef.get(ref)));
-		dbRef.on((data) => setData(data));
+		dbRef.on((data) => {
+			setData(data);
+		});
+
+		return () => {
+			dbRef.off();
+		};
 	}, [refList]);
 
 	return data;

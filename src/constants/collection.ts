@@ -6,6 +6,7 @@ const COLLECTIONS = {
 	FRIENDS: "friends",
 	REQUESTS: "requests",
 	INVITATION: "invitations",
+	BIO: "bio",
 };
 
 export default COLLECTIONS;

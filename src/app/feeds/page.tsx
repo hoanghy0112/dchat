@@ -7,7 +7,6 @@ import { addCollectionData } from "@/hooks/useData";
 import IFeed from "@/types/IFeed";
 import { Input } from "@nextui-org/react";
 import { getCookie } from "cookies-next";
-import { redirect } from "next/navigation";
 import { FormEventHandler, useCallback, useRef } from "react";
 
 export default function Page() {

@@ -3,6 +3,7 @@ export default interface IUser {
 	displayName: string;
 	email: string;
 	photo?: string;
+	bio?: string;
 }
 
 export interface IRequest {
