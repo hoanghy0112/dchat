@@ -24,8 +24,11 @@ import { FcFullTrash } from "react-icons/fc";
 import { IoTrashOutline } from "react-icons/io5";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+	const router = useRouter();
+
 	const uid = getCookie(COOKIES.UID);
 	const displayName = getCookie(COOKIES.DISPLAY_NAME);
 	const photo = getCookie(COOKIES.PHOTO);
@@ -58,6 +61,11 @@ export default function Page() {
 				const storageRef = ref(storage, url);
 				uploadBytes(storageRef, file).then((snapshot) => {
 					addCollectionData([COLLECTIONS.FEED, date, COLLECTIONS.PHOTOS])({
+						date: new Date().toISOString(),
+						url,
+						uid,
+					});
+					addCollectionData([COLLECTIONS.USERS, uid, COLLECTIONS.PHOTOS])({
 						date: new Date().toISOString(),
 						url,
 						uid,
@@ -96,16 +104,19 @@ export default function Page() {
 
 	return (
 		<div className=" pt-5 flex flex-col overflow-x-hidden gap-5 w-full">
-			<h1 className=" font-bold text-2xl px-4">
-				Hello,
-				<br /> {displayName}
-			</h1>
+			<div className=" flex justify-between">
+				<h1 className=" font-bold text-2xl px-4">
+					Hello,
+					<br /> {displayName}
+				</h1>
+			</div>
 			<form
 				className=" flex flex-col gap-3 px-3 w-full justify-center"
 				onSubmit={onSubmit}
 			>
 				<div className=" flex gap-3">
 					<Image
+						onClick={() => router.push(`/profile`)}
 						className=" mt-2 h-fit rounded-full"
 						src={photo || ""}
 						width={30}

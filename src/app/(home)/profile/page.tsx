@@ -14,7 +14,7 @@ import {
 import { storage } from "@/services/firebase";
 import { IPhoto } from "@/types/IPhoto";
 import IUser, { IFriend, IInvitation } from "@/types/IUser";
-import { getCookie } from "cookies-next";
+import { deleteCookie, getCookie, setCookie } from "cookies-next";
 import { ref, uploadBytes } from "firebase/storage";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -30,6 +30,7 @@ import { FiPlus } from "react-icons/fi";
 import { GoPencil } from "react-icons/go";
 import { IoMdCheckmark } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
+import { VscSignOut } from "react-icons/vsc";
 
 export default function Page() {
 	const router = useRouter();
@@ -172,11 +173,14 @@ export default function Page() {
 								<GoPencil size={18} className="mr-2" /> Edit
 							</Button>
 							<Button
-								onClick={() => router.push("add-friend")}
+								onClick={() => {
+									deleteCookie(COOKIES.UID);
+									router.push("/signin");
+								}}
 								className=" bg-slate-100"
 								btnType={"secondary"}
 							>
-								<FaUserPlus size={20} />
+								<VscSignOut size={20} />
 							</Button>
 						</div>
 					</div>
