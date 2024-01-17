@@ -35,11 +35,10 @@ function UserList({
 	const [isOpen, setIsOpen] = useState(false);
 	const [keyword, setKeyword] = useState("");
 
-	const { data: userList } = useCollectionList<IUser>([
-		COLLECTIONS.USERS,
-		uid,
-		COLLECTIONS.FRIENDS,
-	]);
+	const { data: userList } = useCollectionList<IUser>(
+		[COLLECTIONS.USERS, uid, COLLECTIONS.MESSAGE_USERS],
+		"uid"
+	);
 
 	const handleChoose = (uid: string) => () => {
 		setIsOpen(false);

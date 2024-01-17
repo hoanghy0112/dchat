@@ -29,5 +29,5 @@ export default function useChatRoomList() {
 			});
 	}, [uid]);
 
-	return chatRooms;
+	return Array.from(chatRooms.values());
 }

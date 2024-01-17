@@ -11,11 +11,10 @@ import { IFriend } from "@/types/IUser";
 
 export default function Page() {
 	const currentUID = getCookie(COOKIES.UID) || "";
-	const { data: friends } = useCollectionList<IFriend>([
-		COLLECTIONS.USERS,
-		currentUID,
-		COLLECTIONS.FRIENDS,
-	]);
+	const { data: friends } = useCollectionList<IFriend>(
+		[COLLECTIONS.USERS, currentUID, COLLECTIONS.FRIENDS],
+		"uid"
+	);
 
 	return (
 		<div className=" relative w-screen flex flex-col">

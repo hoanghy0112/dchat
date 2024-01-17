@@ -18,7 +18,7 @@ export default function Page() {
 	);
 
 	return (
-		<div className=" relative w-screen flex flex-col">
+		<div className=" relative w-full flex flex-col">
 			<div className=" mt-5 flex justify-between p-5">
 				<div className=" flex flex-col gap-3">
 					<h1 className={` font-bold text-xl ${FONT.primary.className}`}>
@@ -29,7 +29,7 @@ export default function Page() {
 			<FriendMenu active={"Request"} />
 			<div className=" mt-4 flex flex-col gap-2">
 				{requests
-					.filter(({ state }) => state == "pending")
+					// .filter(({ state }) => state == "pending")
 					.map(({ uid, date, state }) => (
 						<RequestUser key={date} uid={uid} state={state} />
 					))}

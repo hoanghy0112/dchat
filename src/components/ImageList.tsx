@@ -18,14 +18,11 @@ export default function ImageList({
 			<div className=" mt-8 px-0 w-full grid gap-1 grid-cols-3 sm:grid-cols-4">
 				{children}
 				{photos.map(({ url, date, uid }) => (
-					<motion.div
-						layoutId={url}
-						onClick={() => setSelectedId({ url, date, uid })}
-					>
+					<div key={url} onClick={() => setSelectedId({ url, date, uid })}>
 						<SquareDiv className=" fixed w-full bg-slate-200 cursor-pointer active:bg-slate-300 duration-200">
 							<ImageStorage src={url} />
 						</SquareDiv>
-					</motion.div>
+					</div>
 				))}
 			</div>
 			{selectedId && (

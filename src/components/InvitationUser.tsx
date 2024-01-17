@@ -1,29 +1,64 @@
 import COLLECTIONS from "@/constants/collection";
 import { COOKIES } from "@/constants/cookies";
-import { addCollectionData, useCollectionItem } from "@/hooks/useData";
-import IUser from "@/types/IUser";
+import {
+	addCollectionData,
+	addItemData,
+	useCollectionItem,
+	useCollectionList,
+} from "@/hooks/useData";
+import IUser, { IFriend } from "@/types/IUser";
 import { getCookie } from "cookies-next";
 import Image from "next/image";
 
 export default function InvitationUser({
 	uid,
 	state,
+	date,
 }: {
 	uid: string;
+	date: string;
 	state: "pending" | "accept" | "reject" | "abort";
 }) {
 	const currentUID = getCookie(COOKIES.UID) || "";
 	const user = useCollectionItem<IUser>([COLLECTIONS.USERS, uid]);
 
+	const { data: friends } = useCollectionList<IFriend>([
+		COLLECTIONS.USERS,
+		uid,
+		COLLECTIONS.FRIENDS,
+	]);
+
 	function onAccept() {
-		addCollectionData([COLLECTIONS.USERS, currentUID, COLLECTIONS.FRIENDS])({
-			date: new Date().toISOString(),
-			uid,
+		addItemData([COLLECTIONS.USERS, uid, COLLECTIONS.REQUESTS, date])({
+			uid: currentUID,
+			date,
+			state: "accept",
 		});
-		addCollectionData([COLLECTIONS.USERS, uid, COLLECTIONS.FRIENDS])({
-			date: new Date().toISOString(),
+		addItemData([
+			COLLECTIONS.USERS,
+			currentUID,
+			COLLECTIONS.INVITATION,
+			date,
+		])({
 			uid,
+			date,
+			state: "accept",
 		});
+		if (friends.some((friend) => friend.uid == currentUID)) return;
+		addCollectionData([COLLECTIONS.USERS, currentUID, COLLECTIONS.FRIENDS])(
+			{
+				date: new Date().toISOString(),
+				uid,
+			},
+			"uid"
+		);
+		addCollectionData([COLLECTIONS.USERS, uid, COLLECTIONS.FRIENDS])(
+			{
+				date: new Date().toISOString(),
+				uid: currentUID,
+			},
+			"uid"
+		);
 	}
 
 	return user ? (

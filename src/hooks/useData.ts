@@ -43,7 +43,7 @@ export function useCollectionList<T extends { date?: string }>(
 			setData((prev) => {
 				const newMap = new Map(prev.entries());
 				if (!data[key]) {
-					console.error("Key not found in data");
+					console.error(`Key "${key}" not found in data`, { data });
 					return newMap;
 				}
 				newMap.set(data[key], data);

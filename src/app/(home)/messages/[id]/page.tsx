@@ -31,6 +31,9 @@ import { LuSendHorizonal } from "react-icons/lu";
 import { MdCallEnd } from "react-icons/md";
 
 import { useRouter } from "next/navigation";
+import COLLECTIONS from "@/constants/collection";
+import { addCollectionData, useCollectionList } from "@/hooks/useData";
+import IUser from "@/types/IUser";
 
 export default function Page({
 	params: { id: receiverUID },
@@ -54,6 +57,11 @@ export default function Page({
 
 	const messages = useChatMessages(receiverUID);
 
+	const { data: messageUsers } = useCollectionList<IUser>(
+		[COLLECTIONS.USERS, uid, COLLECTIONS.MESSAGE_USERS],
+		"uid"
+	);
+
 	const { onOpen } = useContext(VideoModalContext);
 
 	function autoScroll(behavior: ScrollBehavior = "smooth") {
@@ -76,6 +84,17 @@ export default function Page({
 			.get(`${DB_KEYS.MESSAGES}-${roomTitle}`)
 			.get(index)
 			.put(message);
+
+		if (messageUsers.every((user) => user.uid != receiverUID)) {
+			addCollectionData([COLLECTIONS.USERS, uid, COLLECTIONS.MESSAGE_USERS])(
+				{ date: new Date().toISOString(), uid: receiverUID }
+			);
+			addCollectionData([
+				COLLECTIONS.USERS,
+				receiverUID,
+				COLLECTIONS.MESSAGE_USERS,
+			])({ date: new Date().toISOString(), uid });
+		}
 	}
 
 	useEffect(() => {
@@ -192,7 +211,7 @@ export default function Page({
 							/>
 						</div>
 					</div>
-					<div className=" w-full border-t-1 mt-0 pt-3 pr-3 flex-1 overflow-auto">
+					<div className=" w-full border-t-1 mt-0 pt-3 px-3 flex-1 overflow-auto">
 						{messages.map((data: IMessage, index: number) => (
 							<div
 								key={index}

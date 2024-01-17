@@ -1,33 +1,30 @@
 "use client";
 
 import Button from "@/components/Button";
-import ImageStorage from "@/components/ImageStorage";
-import SquareDiv from "@/components/SquareDiv";
 import COLLECTIONS from "@/constants/collection";
+import { COOKIES } from "@/constants/cookies";
 import {
 	addCollectionData,
 	useCollectionItem,
 	useCollectionList,
 } from "@/hooks/useData";
-import { storage } from "@/services/firebase";
 import { IPhoto } from "@/types/IPhoto";
-import IUser, { IFriend, IInvitation } from "@/types/IUser";
-import { ref, uploadBytes } from "firebase/storage";
+import IUser, { IFriend, IInvitation, IRequest } from "@/types/IUser";
+import { getCookie } from "cookies-next";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import {
-	ChangeEventHandler,
-	FormEventHandler,
-	useCallback,
-	useRef,
-	useState,
-} from "react";
+import { FormEventHandler, useCallback, useState } from "react";
 import { FaUserPlus } from "react-icons/fa6";
+import { IoChatboxOutline } from "react-icons/io5";
 import { IoMdCheckmark } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 import ImageList from "./ImageList";
+import toast from "react-hot-toast";
 
 export default function UserProfilePage({ uid }: { uid: string }) {
+	const router = useRouter();
+	const currentUID = getCookie(COOKIES.UID) || "";
+
 	const user = useCollectionItem<IUser>([COLLECTIONS.USERS, uid]);
 
 	const { data: photos } = useCollectionList<IPhoto>([
@@ -56,6 +53,11 @@ export default function UserProfilePage({ uid }: { uid: string }) {
 		"uid"
 	);
 
+	const { data: requests } = useCollectionList<IRequest>(
+		[COLLECTIONS.USERS, currentUID, COLLECTIONS.REQUESTS],
+		"uid"
+	);
+
 	const onSubmit = useCallback<FormEventHandler<HTMLFormElement>>(
 		(e) => {
 			e.preventDefault();
@@ -74,7 +76,7 @@ export default function UserProfilePage({ uid }: { uid: string }) {
 	);
 
 	return user ? (
-		<div className=" w-screen h-screen flex flex-col gap-0 bg-white">
+		<div className=" w-full flex flex-col gap-0 bg-white">
 			<p className=" mt-5 text-center font-bold text-sm">
 				{user.displayName}
 			</p>
@@ -131,16 +133,59 @@ export default function UserProfilePage({ uid }: { uid: string }) {
 					<div className=" flex flex-col gap-3">
 						<p className=" text-sm">{userBio.at(0)?.bio}</p>
 						<div className="flex gap-3">
-							<Button
-								onClick={() => {
-									setIsOpenEdit(true);
-									setBio(userBio.at(0)?.bio);
-								}}
-								className=" flex-1"
-								btnType={"primary"}
-							>
-								<FaUserPlus size={20} className=" mr-2" /> Add friend
-							</Button>
+							{friends.some(({ uid }) => uid == currentUID) ? (
+								<Button
+									onClick={() => {
+										router.push(`/messages/${uid}`);
+									}}
+									className=" flex-1"
+									btnType={"primary"}
+								>
+									<IoChatboxOutline size={20} className=" mr-2" /> Send
+									message
+								</Button>
+							) : requests.some(
+									(value) =>
+										value.uid == uid && value.state == "pending"
+							  ) ? (
+								<p className=" w-full p-2 text-center rounded-lg bg-slate-100 font-semibold text-sm">
+									Your request is sent
+								</p>
+							) : (
+								<Button
+									onClick={() => {
+										toast.success("Your request has been sent");
+										addCollectionData([
+											COLLECTIONS.USERS,
+											currentUID,
+											COLLECTIONS.REQUESTS,
+										])(
+											{
+												uid,
+												date: new Date().toISOString(),
+												state: "pending",
+											},
+											"uid"
+										);
+										addCollectionData([
+											COLLECTIONS.USERS,
+											uid,
+											COLLECTIONS.INVITATION,
+										])(
+											{
+												uid: currentUID,
+												date: new Date().toISOString(),
+												state: "pending",
+											},
+											"uid"
+										);
+									}}
+									className=" flex-1"
+									btnType={"primary"}
+								>
+									<FaUserPlus size={20} className=" mr-2" /> Add friend
+								</Button>
+							)}
 							{/* <Button
 								onClick={() => router.push("add-friend")}
 								className=" bg-slate-100"

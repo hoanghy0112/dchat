@@ -8,6 +8,7 @@ const COLLECTIONS = {
 	INVITATION: "invitations",
 	BIO: "bio",
 	PHOTOS: "PHOTOS",
+	MESSAGE_USERS: "message-users",
 };
 
 export default COLLECTIONS;

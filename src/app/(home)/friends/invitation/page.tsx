@@ -11,11 +11,15 @@ import FriendMenu from "../menu";
 
 export default function Page() {
 	const currentUID = getCookie(COOKIES.UID) || "";
-	const { data: invitations } = useCollectionList<IInvitation>([
-		COLLECTIONS.USERS,
-		currentUID,
-		COLLECTIONS.INVITATION,
-	], "uid");
+	const { data: invitations } = useCollectionList<IInvitation>(
+		[COLLECTIONS.USERS, currentUID, COLLECTIONS.INVITATION],
+		"uid"
+	);
+
+	const { data: friends } = useCollectionList<IInvitation>(
+		[COLLECTIONS.USERS, currentUID, COLLECTIONS.FRIENDS],
+		"uid"
+	);
 
 	return (
 		<div className=" relative w-screen flex flex-col">
@@ -30,8 +34,16 @@ export default function Page() {
 			<div className=" mt-4 flex flex-col gap-2">
 				{invitations
 					.filter(({ state }) => state == "pending")
+					.filter((invitation) =>
+						friends.every((friend) => friend.uid != invitation.uid)
+					)
 					.map(({ uid, date, state }) => (
-						<InvitationUser key={date} uid={uid} state={state} />
+						<InvitationUser
+							key={date}
+							date={date}
+							uid={uid}
+							state={state}
+						/>
 					))}
 			</div>
 		</div>
