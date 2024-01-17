@@ -9,7 +9,6 @@ export default function ImageStorage({ src }: { src: string }) {
 	useEffect(() => {
 		getDownloadURL(ref(storage, src))
 			.then((url) => {
-				console.log({ url });
 				setUrl(url);
 			})
 			.catch((error) => {

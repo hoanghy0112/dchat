@@ -7,10 +7,11 @@ import FONT from "@/constants/fontFamily";
 import { useCollectionList } from "@/hooks/useData";
 import { getCookie } from "cookies-next";
 import FriendMenu from "../menu";
+import { IFriend } from "@/types/IUser";
 
 export default function Page() {
 	const currentUID = getCookie(COOKIES.UID) || "";
-	const { data: friends } = useCollectionList<{ uid: string }>([
+	const { data: friends } = useCollectionList<IFriend>([
 		COLLECTIONS.USERS,
 		currentUID,
 		COLLECTIONS.FRIENDS,
