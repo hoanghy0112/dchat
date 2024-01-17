@@ -1,6 +1,5 @@
 "use client";
 
-import useUser from "@/hooks/useUser";
 import { Button } from "@nextui-org/react";
 import Image from "next/image";
 import { FormEvent } from "react";
