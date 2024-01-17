@@ -29,7 +29,7 @@ export default function CommentItem({
 							<p className=" text-sm mobile:max-sm:text-xs">{date.slice(0, 10)}<span> {date.slice(11, 16)}</span></p>
 						</div>
 						<div className=" mx-3 flex flex-wrap-reverse whitespace-break-spaces mobile:max-sm:w-max-3/4">
-							<p className=" text-wrap mobile:max-sm:text-sm mobile:max-sm:max-w-full">{content}</p>
+							<p className=" break-words whitespace-break-spaces text-wrap mobile:max-sm:text-sm mobile:max-sm:max-w-full">{content}</p>
 						</div>
 					</div>
 				</>

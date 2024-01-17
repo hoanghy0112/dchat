@@ -5,11 +5,9 @@ import { ReactNode } from "react";
 import { Toaster } from "react-hot-toast";
 
 export default function Layout({ children }: { children: ReactNode }) {
-	const uid = cookies().get(COOKIES.UID)?.value;
-	if (!uid) redirect("/signin");
 
 	return (
-		<div className=" w-screen h-screen bg-slate-50">
+		<div className=" w-screen bg-white">
 			<Toaster position="top-center" reverseOrder={false} />
 			{children}
 		</div>

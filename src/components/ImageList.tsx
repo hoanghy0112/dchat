@@ -9,7 +9,7 @@ export default function ImageList({
 	children,
 }: {
 	photos: IPhoto[];
-	children: ReactNode;
+	children?: ReactNode;
 }) {
 	const [selectedId, setSelectedId] = useState<IPhoto>();
 

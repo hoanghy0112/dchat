@@ -18,7 +18,7 @@ export default function Page() {
 	]);
 
 	return (
-		<div className=" relative w-screen h-screen flex flex-col">
+		<div className=" relative w-screen flex flex-col">
 			<div className=" mt-5 flex justify-between p-5">
 				<div className=" flex flex-col gap-3">
 					<h1 className={` font-bold text-xl ${FONT.primary.className}`}>

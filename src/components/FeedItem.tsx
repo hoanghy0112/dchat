@@ -11,9 +11,9 @@ import { FormEventHandler, useCallback, useRef } from "react";
 import { getCookie } from "cookies-next";
 import { COOKIES } from "@/constants/cookies";
 import { BiSolidLike } from "react-icons/bi";
-import { FaCommentAlt } from "react-icons/fa"
+import { FaCommentAlt } from "react-icons/fa";
 import Button from "./Button";
-import {Input} from "@nextui-org/react";
+import { Input } from "@nextui-org/react";
 
 export default function FeedItem({
 	info: { date, content, isVisible, uid },
@@ -92,7 +92,10 @@ export default function FeedItem({
 					/>
 					<div>
 						<p className=" font-medium">{user.displayName}</p>
-						<p className=" text-sm text-gray-600">{date.slice(0, 10)}<span>:{date.slice(11, 16)}</span></p>
+						<p className=" text-sm text-gray-600">
+							{date.slice(0, 10)}
+							<span>:{date.slice(11, 16)}</span>
+						</p>
 					</div>
 				</div>
 			) : null}
@@ -115,9 +118,25 @@ export default function FeedItem({
 				{comments.map((comment) => (
 					<CommentItem key={comment.date} info={comment} />
 				))}
-				<form className=" flex mx-4 my-3 w-full mobile:max-sm:mx-2 justify-center" onSubmit={onSubmit}>
-					<Input size="xs" className=" w-3/4 mobile:max-sm:w-2/3 border border-gray-600 rounded-xl min-[425px]:w-2/3" ref={commentRef} type="text" />
-					<button className=" bg-[#7DD3FC] mobile:max-sm:w-1/4 mobile:max-sm:mx-2 mx-3 px-2 rounded-xl mobile:max-sm:text-xs" type="submit">Comment</button>
+				<form
+					className=" flex mx-4 my-3 w-full mobile:max-sm:mx-2 justify-center"
+					onSubmit={onSubmit}
+				>
+					{
+						<Input
+							//@ts-ignore
+							size="xs"
+							className=" w-3/4 mobile:max-sm:w-2/3 border border-gray-600 rounded-xl min-[425px]:w-2/3"
+							ref={commentRef}
+							type="text"
+						/>
+					}
+					<button
+						className=" bg-[#7DD3FC] mobile:max-sm:w-1/4 mobile:max-sm:mx-2 mx-3 px-2 rounded-xl mobile:max-sm:text-xs"
+						type="submit"
+					>
+						Comment
+					</button>
 				</form>
 			</div>
 		</div>

@@ -44,9 +44,24 @@ export default function Page() {
 
 	return (
 		<div>
-			<form className=" flex px-4 py-3 w-full justify-center" onSubmit={onSubmit}>
-				<Input label="How do you feel today!!!" size="xs" className=" w-3/4 bg-white rounded-xl" ref={contentRef} type="text" />
-				<button className=" bg-[#7DD3FC] mx-3 px-2 rounded-xl" type="submit">Post</button>
+			<form
+				className=" flex px-4 py-3 w-full justify-center"
+				onSubmit={onSubmit}
+			>
+				<Input
+					label="How do you feel today!!!"
+					//@ts-ignore
+					size="xs"
+					className=" w-3/4 bg-white rounded-xl"
+					ref={contentRef}
+					type="text"
+				/>
+				<button
+					className=" bg-[#7DD3FC] mx-3 px-2 rounded-xl"
+					type="submit"
+				>
+					Post
+				</button>
 			</form>
 			<FeedList />
 		</div>
