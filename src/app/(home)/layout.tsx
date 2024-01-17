@@ -38,12 +38,12 @@ export default function Layout({ children }: { children: ReactNode }) {
 	return (
 		<div className=" w-screen h-screen flex flex-col">
 			<div className=" flex-1 overflow-y-auto ">{children}</div>
-			<div className=" pb-1 pt-3 flex-none w-full bg-white shadow-2xl flex items-center justify-evenly">
+			<div className=" px-2 pb-1 pt-3 flex-none w-full bg-white shadow-2xl flex items-center justify-evenly">
 				{ROUTES.map(({ icon, title, link }) => (
 					<Link
 						key={link}
 						href={link}
-						className=" p-2 flex flex-col items-center rounded-lg gap-[5px] active:bg-slate-100 duration-200"
+						className=" flex-1 p-2 flex flex-col items-center rounded-lg gap-[5px] active:bg-slate-100 duration-200"
 					>
 						{icon}
 						<p className=" text-xs">{title}</p>

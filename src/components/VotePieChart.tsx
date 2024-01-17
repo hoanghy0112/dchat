@@ -67,14 +67,12 @@ export default function VotePieChart({
 						).length
 				),
 				borderColor: "#FFCB1B",
-				backgroundColor: ["#3CAEF4", "#BBE1FC", "#42E68E", "#C7B8FF"],
+				backgroundColor: ["#3CAEF4", "#42E68E", "#BBE1FC", "#C7B8FF"],
 				hoverOffset: 8,
 				rAxisID: "r",
 			},
 		],
 	};
-
-	console.log({ data });
 
 	return (
 		<div className=" w-fit relative mt-0 px-0 sm:px-8 my-5">
