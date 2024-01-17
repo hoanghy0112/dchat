@@ -18,7 +18,10 @@ export default function RecentPollStatistic() {
 				<div className="flex justify-between gap-4 w-fll">
 					<div className="flex flex-col gap-1 ">
 						{poll.choices.split("_").map((choice, i) => (
-							<p className=" flex gap-2 py-1 px-2 rounded-md border-0 border-slate-400 text-slate-700 text-sm font-medium">
+							<p
+								key={choice}
+								className=" flex gap-2 py-1 px-2 rounded-md border-0 border-slate-400 text-slate-700 text-sm font-medium"
+							>
 								<div
 									className=" h-full w-2"
 									style={{ backgroundColor: COLORS[i] }}
