@@ -13,7 +13,7 @@ import { Button, Checkbox, cn } from "@nextui-org/react";
 import { getCookie } from "cookies-next";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { FcComboChart } from "react-icons/fc";
+import { FcComboChart, FcPositiveDynamic } from "react-icons/fc";
 
 export default function PollItem({ poll }: { poll?: IPoll }) {
 	const uid = getCookie(COOKIES.UID) || "";
@@ -93,7 +93,7 @@ export default function PollItem({ poll }: { poll?: IPoll }) {
 						className=" w-full flex gap-1 p-2 rounded-lg border-0 "
 					>
 						<Checkbox
-							isSelected={selectRef.current[id]}
+							isSelected={voteInfo ? selectRef.current[id] : undefined}
 							onChange={(e) => {
 								selectRef.current[id] = e.target.checked;
 							}}
@@ -127,7 +127,7 @@ export default function PollItem({ poll }: { poll?: IPoll }) {
 						onClick={onSubmit}
 					>
 						<p className=" flex items-center gap-3 text-sky-800 font-semibold">
-							<FcComboChart size={20} />
+							<FcPositiveDynamic size={20} />
 							Send
 						</p>
 					</Button>

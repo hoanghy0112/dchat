@@ -123,7 +123,7 @@ export default function Page() {
 				</Button>
 			</div>
 			<form
-				className=" flex flex-col gap-3 px-3 w-full justify-center"
+				className=" mb-3 flex flex-col gap-3 px-3 w-full justify-center"
 				onSubmit={onSubmit}
 			>
 				<div className=" flex gap-3">

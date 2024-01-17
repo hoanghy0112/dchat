@@ -1,9 +1,8 @@
 "use client";
 
 import useRecentPoll from "@/hooks/useRecentPoll";
+import { FcSalesPerformance } from "react-icons/fc";
 import VotePieChart from "./VotePieChart";
-import { LuChevronRight } from "react-icons/lu";
-import { FcComboChart, FcSalesPerformance  } from "react-icons/fc";
 
 
 export default function RecentPollStatistic() {
@@ -11,7 +10,7 @@ export default function RecentPollStatistic() {
 
 	return poll ? (
 		<div className=" w-full shadow-lg">
-			<p className=" flex items-center px-2 py-3 bg-green-500 text-white text-sm font-semibold w-full">
+			<p className=" flex items-center px-2 py-3 bg-sky-500 text-white text-sm font-semibold w-full">
 				View your recent poll result
 				<FcSalesPerformance  size={20} className=" ml-2" />
 			</p>
