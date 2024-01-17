@@ -59,14 +59,14 @@ export default function Page() {
 					<UserCardInner user={user} key={user.email} />
 				))}
 			</UserStack>
-			<div className=" p-5 grid gap-3 place-items-center">
+			{/* <div className=" p-5 grid gap-3 place-items-center">
 				<p className=" font-semibold">
 					Sent invitation to <span>{sended}</span> users
 				</p>
 				<p className=" underline underline-offset-2 font-normal flex gap-2 items-center">
 					View request list <FaArrowRight />
 				</p>
-			</div>
+			</div> */}
 		</div>
 	);
 }

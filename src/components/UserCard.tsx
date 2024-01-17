@@ -143,6 +143,7 @@ export const UserCard = ({
 						onVote(true);
 				}}
 				whileTap={{ scale: 1.1, rotate: 0 }}
+				whileHover={{ scale: 1.1, rotate: 0 }}
 				{...props}
 			>
 				{children}
