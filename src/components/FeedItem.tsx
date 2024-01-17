@@ -142,6 +142,7 @@ export default function FeedItem({
 			<Carousel className=" bg-white" slide={false} slideInterval={1000}>
 				{photos.map(({ url }, index) => (
 					<SquareDiv
+						key={url}
 						className={` w-full bg-slate-200 cursor-pointer active:bg-slate-300 duration-200`}
 					>
 						<ImageStorage src={url} />

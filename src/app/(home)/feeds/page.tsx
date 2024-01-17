@@ -120,7 +120,10 @@ export default function Page() {
 							.fill("")
 							.map((_, i) =>
 								files?.item(i) != null ? (
-									<SquareDiv className=" fixed w-full bg-slate-200 cursor-pointer active:bg-slate-300 duration-200">
+									<SquareDiv
+										key={i}
+										className=" fixed w-full bg-slate-200 cursor-pointer active:bg-slate-300 duration-200"
+									>
 										<Image
 											//@ts-ignore
 											src={URL.createObjectURL(files?.item(i))}

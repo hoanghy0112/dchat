@@ -44,7 +44,7 @@ function UserList({
 	return (
 		<div className={className}>
 			{userList.map((user) => (
-				<ChatUser uid={user.uid} />
+				<ChatUser key={user.uid} uid={user.uid} />
 			))}
 		</div>
 	);
