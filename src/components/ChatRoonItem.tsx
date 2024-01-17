@@ -21,7 +21,7 @@ export default function ChatItem({
 	return (
 		<li
 			onClick={() => {
-				router.replace(`/home/${receiverUID}`);
+				router.replace(`/messages/${receiverUID}`);
 			}}
 			className=" flex items-center justify-between gap-2 text-sm rounded-lg p-3 my-1 hover:bg-slate-200 active:bg-slate-300 duration-200 cursor-pointer"
 		>
