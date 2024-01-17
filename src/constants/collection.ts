@@ -7,6 +7,7 @@ const COLLECTIONS = {
 	REQUESTS: "requests",
 	INVITATION: "invitations",
 	BIO: "bio",
+	PHOTOS: "PHOTOS",
 };
 
 export default COLLECTIONS;

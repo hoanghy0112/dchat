@@ -25,7 +25,7 @@ export function useList<T>(collection: string): { data: T[] } {
 	return { data: Array.from(data.values()) };
 }
 
-export function useCollectionList<T>(
+export function useCollectionList<T extends { date?: string }>(
 	refList: string[],
 	key = "date"
 ): { data: T[] } {
@@ -52,7 +52,13 @@ export function useCollectionList<T>(
 		});
 	}, [refList]);
 
-	return { data: Array.from(data.values()) };
+	return {
+		data: Array.from(data.values()).sort((a, b) =>
+			a.date && b.date
+				? new Date(b.date).getTime() - new Date(a.date).getTime()
+				: 1
+		),
+	};
 }
 
 export const addCollectionData =
@@ -73,7 +79,10 @@ export const addCollectionData =
 		collections.slice(1).forEach((ref) => (dbRef = dbRef.get(ref)));
 		const date = new Date().toISOString();
 		console.log({ dbRef, value });
-		dbRef.get(value[key]).put({ ...value });
+		dbRef.get(value[key]).put({
+			...value,
+			...(value.date ? {} : { date: new Date().toISOString() }),
+		});
 		return date;
 	};
 

@@ -1,45 +1,59 @@
 "use client";
 
 import Button from "@/components/Button";
+import ImageStorage from "@/components/ImageStorage";
+import SquareDiv from "@/components/SquareDiv";
 import COLLECTIONS from "@/constants/collection";
 import { COOKIES } from "@/constants/cookies";
 import {
 	addCollectionData,
-	addItemData,
 	useCollectionItem,
 	useCollectionList,
 } from "@/hooks/useData";
-import IUser, { IInvitation } from "@/types/IUser";
+import { storage } from "@/services/firebase";
+import { IPhoto } from "@/types/IPhoto";
+import IUser, { IFriend, IInvitation } from "@/types/IUser";
 import { getCookie } from "cookies-next";
+import { ref, uploadBytes } from "firebase/storage";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
+	ChangeEventHandler,
 	FormEventHandler,
 	useCallback,
-	useEffect,
-	useLayoutEffect,
 	useRef,
 	useState,
 } from "react";
+import { FaUserPlus } from "react-icons/fa6";
+import { FiPlus } from "react-icons/fi";
 import { GoPencil } from "react-icons/go";
-import { IoMdPeople } from "react-icons/io";
 import { IoMdCheckmark } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 
 export default function Page() {
+	const router = useRouter();
+
 	const uid = getCookie(COOKIES.UID) || "";
 	const user = useCollectionItem<IUser>([COLLECTIONS.USERS, uid]);
-	const { data: userBio } = useCollectionList<{ bio: string }>([
+
+	const { data: photos } = useCollectionList<IPhoto>([
+		COLLECTIONS.USERS,
+		uid,
+		COLLECTIONS.PHOTOS,
+	]);
+	const { data: userBio } = useCollectionList<{ bio: string; date: string }>([
 		COLLECTIONS.USERS,
 		uid,
 		COLLECTIONS.BIO,
 	]);
 
 	// const bioRef = useRef<HTMLTextAreaElement>(null);
+	const fileRef = useRef<HTMLInputElement>(null);
 	const [bio, setBio] = useState<string>();
 
 	const [isOpenEdit, setIsOpenEdit] = useState(false);
 
-	const { data: friends } = useCollectionList<{ uid: string }>([
+	const { data: friends } = useCollectionList<IFriend>([
 		COLLECTIONS.USERS,
 		uid,
 		COLLECTIONS.FRIENDS,
@@ -66,6 +80,25 @@ export default function Page() {
 			);
 		},
 		[bio, uid]
+	);
+
+	const onFileChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
+		(e) => {
+			const file = e.target.files?.item(0);
+			if (!file) return;
+
+			const url = `photo-${uid}-${photos.length}`;
+			const storageRef = ref(storage, url);
+			uploadBytes(storageRef, file).then((snapshot) => {
+				console.log("Uploaded a file!");
+				addCollectionData([COLLECTIONS.USERS, uid, COLLECTIONS.PHOTOS])({
+					date: new Date().toISOString(),
+					url,
+					uid,
+				});
+			});
+		},
+		[]
 	);
 
 	return user ? (
@@ -137,13 +170,41 @@ export default function Page() {
 							>
 								<GoPencil size={18} className="mr-2" /> Edit
 							</Button>
-							<Button className=" bg-slate-100" btnType={"secondary"}>
-								<IoMdPeople size={20} />
+							<Button
+								onClick={() => router.push("add-friend")}
+								className=" bg-slate-100"
+								btnType={"secondary"}
+							>
+								<FaUserPlus size={20} />
 							</Button>
 						</div>
 					</div>
 				)}
 			</div>
+			<div className=" mt-8 px-0 w-full grid gap-1 grid-cols-3 sm:grid-cols-4">
+				<SquareDiv
+					onClick={() => {
+						fileRef.current?.click();
+					}}
+					className=" w-full bg-slate-200 cursor-pointer active:bg-slate-300 duration-200"
+				>
+					<FiPlus size={25} />
+				</SquareDiv>
+				{photos.map(({ url, date }) => (
+					<SquareDiv
+						key={date}
+						className=" w-full bg-slate-200 cursor-pointer active:bg-slate-300 duration-200"
+					>
+						<ImageStorage src={url} />
+					</SquareDiv>
+				))}
+			</div>
+			<input
+				onChange={onFileChange}
+				className=" h-0 w-0"
+				ref={fileRef}
+				type={"file"}
+			/>
 		</div>
 	) : null;
 }

@@ -4,6 +4,12 @@ export default interface IUser {
 	email: string;
 	photo?: string;
 	bio?: string;
+	date?: string;
+}
+
+export interface IFriend {
+	uid: string;
+	date?: string;
 }
 
 export interface IRequest {
