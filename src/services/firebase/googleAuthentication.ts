@@ -4,6 +4,8 @@ import {
 	GoogleAuthProvider,
 	UserCredential,
 	User,
+	signInWithRedirect,
+	getRedirectResult,
 } from "firebase/auth";
 import app from "./index";
 
@@ -11,8 +13,11 @@ const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
 
 export const signInWithGoogle = async () => {
-	const user = await signInWithPopup(auth, provider)
+	signInWithRedirect(auth, provider);
+
+	const user = await getRedirectResult(auth)
 		.then((result) => {
+			if (!result) return;
 			const credential = GoogleAuthProvider.credentialFromResult(result);
 			const token = credential?.accessToken;
 			const user = result.user;
