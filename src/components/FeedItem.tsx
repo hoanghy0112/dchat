@@ -15,6 +15,7 @@ import { FaCommentAlt } from "react-icons/fa";
 import { LuSendHorizonal } from "react-icons/lu";
 import { Button, Input } from "@nextui-org/react";
 import moment from "moment";
+import ButtonCustom from "./Button";
 
 export default function FeedItem({
 	info: { date, content, isVisible, uid },
@@ -37,6 +38,8 @@ export default function FeedItem({
 		COLLECTIONS.COMMENTS,
 	]);
 
+	const isLiked = likes.some(({ uid }) => uid == currentUID);
+
 	const addComment = useCallback(
 		(text: string) => {
 			if (!currentUID) return;
@@ -57,7 +60,7 @@ export default function FeedItem({
 	const addLike = useCallback(() => {
 		if (!currentUID) return;
 
-		if (likes.some(({ uid }) => uid == currentUID)) return;
+		if (isLiked) return;
 
 		const value: ILike = {
 			date: new Date().toISOString(),
@@ -103,10 +106,15 @@ export default function FeedItem({
 				<p>{content}</p>
 			</div>
 			<div className=" flex justify-between border-t-1 border-gray-300">
-				<div className=" flex  m-3 items-center">
-					<Button name="like" className=" text-black" onClick={addLike}>
+				<div className=" flex p-2 items-center">
+					<ButtonCustom
+						name="like"
+						btnType={isLiked ? "primary" : "secondary"}
+						className={`${isLiked ? " text-white" : "text-black"}`}
+						onClick={addLike}
+					>
 						<BiSolidLike />
-					</Button>
+					</ButtonCustom>
 					<p className=" mx-2 text-gray-600">{likes.length} likes</p>
 				</div>
 				{/* <div className=" flex items-center justify-center mx-5">
@@ -114,7 +122,7 @@ export default function FeedItem({
 					<p className=" ml-3">Comments</p>
 				</div> */}
 			</div>
-			<div className=" border-t-1 border-gray-300">
+			<div className=" pt-2 border-t-1 border-gray-300">
 				{comments.map((comment) => (
 					<CommentItem key={comment.date} info={comment} />
 				))}

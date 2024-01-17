@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 export default function Layout({ children }: { children: ReactNode }) {
 	const uid = cookies().get(COOKIES.UID)?.value || "";
 
-	if (uid) redirect("/home");
+	if (uid) redirect("/feeds");
 
 	return children;
 }
