@@ -3,11 +3,11 @@
 import useUser from "@/hooks/useUser";
 import { Button } from "@nextui-org/react";
 import Image from "next/image";
-import { FormEvent, ReactNode } from "react";
+import { FormEvent } from "react";
+import { FaFacebookF } from "react-icons/fa";
+import { SiGmail } from "react-icons/si";
 import chat from "../../assets/images/Chat.svg";
 import bgImage from "../../assets/images/bgImage.svg";
-import { SiGmail } from "react-icons/si";
-import { FaFacebookF } from "react-icons/fa";
 
 import { COOKIES } from "@/constants/cookies";
 import { DB_KEYS } from "@/constants/dbKeys";
@@ -16,10 +16,10 @@ import { signInWithGoogle } from "@/services/firebase/googleAuthentication";
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 
-export default function Page({ children }: { children: ReactNode }) {
+export default function Page() {
 	const router = useRouter();
 
-	const user = useUser();
+	// const user = useUser();
 	const db = getDB();
 
 	async function onSignIn(e: FormEvent) {
@@ -44,13 +44,13 @@ export default function Page({ children }: { children: ReactNode }) {
 			photo,
 		});
 
-		user.create(
-			uid,
-			uid,
-			(res: { ok: number; pub: string } | { err: string }) => {
-				user.auth(uid, uid);
-			}
-		);
+		// user.create(
+		// 	uid,
+		// 	uid,
+		// 	(res: { ok: number; pub: string } | { err: string }) => {
+		// 		user.auth(uid, uid);
+		// 	}
+		// );
 
 		router.replace("/feeds");
 	}
@@ -87,7 +87,6 @@ export default function Page({ children }: { children: ReactNode }) {
 					</Button>
 				</div>
 			</div>
-			{children}
 		</div>
 	);
 }
