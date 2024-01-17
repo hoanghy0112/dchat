@@ -1,6 +1,5 @@
 "use client";
 
-import LogoutButton from "@/components/LogoutButton";
 import UserList from "@/components/UserList";
 import UserSearch from "@/components/UserSearch";
 import { COOKIES } from "@/constants/cookies";
@@ -15,7 +14,7 @@ export default function Page() {
 	return (
 		<div className=" relative col-span-4 lg:col-span-3 h-full">
 			<div className=" my-12 mt-5 flex justify-between items-start">
-				<div className=" px-5 w-full flex items-center gap-2 ">
+				<div className=" px-5 w-full flex items-center gap-3 ">
 					{photo ? (
 						<Image
 							className=" rounded-full"
@@ -25,12 +24,11 @@ export default function Page() {
 							alt={""}
 						/>
 					) : null}
-					<p className=" font-semibold text-lg">Chats</p>
+					<p className=" font-semibold text-xl">Chats</p>
 					<UserSearch className=" ml-auto" />
 				</div>
 				<div className=" absolute right-0">{/* <LogoutButton /> */}</div>
 			</div>
-			{/* <ChatRoomList /> */}
 			<UserList className=" px-5" />
 		</div>
 	);

@@ -22,6 +22,7 @@ import Image from "next/image";
 import { useCollectionList } from "@/hooks/useData";
 import COLLECTIONS from "@/constants/collection";
 import ChatUser from "./ChatUser";
+import { TextInput } from "flowbite-react";
 
 function UserList({
 	className,
@@ -40,32 +41,11 @@ function UserList({
 		"uid"
 	);
 
-	const handleChoose = (uid: string) => () => {
-		setIsOpen(false);
-		router.replace(`/messages/${uid}`);
-	};
-
 	return (
 		<div className={className}>
 			{userList.map((user) => (
 				<ChatUser uid={user.uid} />
 			))}
-			{/* {userList.map(({ uid, displayName, photo }) => (
-				<div
-					className=" h-full flex justify-between px-2 py-3 rounded-md hover:bg-slate-400 active:bg-slate-200 transition-all duration-200 cursor-pointer"
-					key={uid}
-					onClick={handleChoose(uid)}
-				>
-					<Image
-						className=" rounded-full"
-						src={photo || ""}
-						width={50}
-						height={50}
-						alt={""}
-					/>
-					<p className=" font-semibold">{displayName}</p>
-				</div>
-			))} */}
 		</div>
 	);
 }

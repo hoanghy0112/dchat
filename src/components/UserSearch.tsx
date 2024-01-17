@@ -21,6 +21,7 @@ import { useDebounce } from "react-use";
 import Button from "./Button";
 import { addCollectionData, useCollectionList } from "@/hooks/useData";
 import COLLECTIONS from "@/constants/collection";
+import SearchUser from "./SearchUser";
 
 export default function UserSearch({
 	className,
@@ -35,10 +36,9 @@ export default function UserSearch({
 	const [isOpen, setIsOpen] = useState(false);
 	const [keyword, setKeyword] = useState("");
 
-	// const [userList, setUserList] = useState<IUser[]>([]);
 	const { data: userList } = useCollectionList<IUser>(
 		[COLLECTIONS.USERS],
-		"email"
+		"uid"
 	);
 	const { data: messageUsers } = useCollectionList<IUser>(
 		[COLLECTIONS.MESSAGE_USERS],
@@ -58,7 +58,7 @@ export default function UserSearch({
 		});
 		addCollectionData([COLLECTIONS.USERS, uid, COLLECTIONS.MESSAGE_USERS])({
 			date: new Date().toISOString(),
-			currentUID,
+			uid: currentUID,
 		});
 	};
 
@@ -98,25 +98,21 @@ export default function UserSearch({
 												)
 										)
 										.map(({ uid, displayName, email }) => (
-											<li
-												className=" h-full flex justify-between px-2 py-3 rounded-md hover:bg-slate-300 active:bg-slate-200 transition-all duration-200 cursor-pointer"
+											<SearchUser
 												key={uid}
+												className=" -mx-3"
 												onClick={handleChoose(uid)}
-											>
-												<p className=" font-semibold">
-													{displayName}
-												</p>
-												<p>{email}</p>
-											</li>
+												uid={uid}
+											/>
 										))}
 								</ul>
 							</ModalBody>
-							<ModalFooter>
+							{/* <ModalFooter>
 								<Button onClick={onClose}>Close</Button>
 								<Button color="primary" onClick={onClose}>
 									Action
 								</Button>
-							</ModalFooter>
+							</ModalFooter> */}
 						</>
 					)}
 				</ModalContent>
